@@ -3,6 +3,7 @@
 
 <mx:Script>
 	<![CDATA[
+		import mx.rpc.events.ResultEvent;
 		
 		private function selectedLoginType(e:Event):void
 		{
@@ -17,7 +18,17 @@
 		
 		private function login_Click(e:MouseEvent):void
 		{
-			loginService.send();
+			if(rbLogin.selected=true){
+				if(txtUsername != null){
+					loginService.url = "loginValidate.php?" + 
+							"username="+txtUsername.text+
+							"password="+txtPassword.text;
+					loginService.send();
+					
+					
+				}
+			}
+			
 		}
 		
 		private function cancel_Click(e:MouseEvent):void

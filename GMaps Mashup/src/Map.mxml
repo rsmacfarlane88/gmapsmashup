@@ -30,10 +30,11 @@
 			
 			//[Embed(source="sport_Icon.png")]
 			//private var sportIcon:Class;
+			public var marker:Marker;
 			
 			private function init():void{
-				testy.visible=false;
-				test2.visible = false;
+				mInfo.visible=false;
+				login.visible = false;
 			}
 			
 			private function onReady(e:MapEvent):void
@@ -45,9 +46,10 @@
 				service.send();
 				addContextMenu();
 				
-				test2.x = (Application.application.width/2) - (test2.width/2) ;
-				test2.y = (Application.application.height/2) - (test2.height/2) ;
-				test2.visible = true;
+				//ensure login window is in the centre of the application on loading
+				login.x = (Application.application.width/2) - (login.width/2) ;
+				login.y = (Application.application.height/2) - (login.height/2) ;
+				login.visible = true;
 			}
 			
 			private function addContextMenu():void {
@@ -60,12 +62,12 @@
             
             	var menuItem:ContextMenuItem = new ContextMenuItem('Add Marker');
             	menuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(e:ContextMenuEvent):void {
-               	testy.x = e.mouseTarget.mouseX;
-               	testy.y = e.mouseTarget.mouseY;
-               	testy.markerLatLng = map.fromViewportToLatLng(new Point(e.mouseTarget.mouseX,e.mouseTarget.mouseY));
-               	testy.visible=true;
+               	mInfo.x = e.mouseTarget.mouseX;
+               	mInfo.y = e.mouseTarget.mouseY;
+               	mInfo.markerLatLng = map.fromViewportToLatLng(new Point(e.mouseTarget.mouseX,e.mouseTarget.mouseY));
+               	mInfo.visible=true;
                
-               	var marker:Marker = new Marker(latlng);
+               	marker = new Marker(latlng);
                	var options:InfoWindowOptions = new InfoWindowOptions({
                 
                 customOffset: new Point(0, 10),
@@ -76,10 +78,12 @@
             
  				marker.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
                 	marker.openInfoWindow(options); 
+                	
  				});
                	map.addOverlay(marker);
-               	marker.openInfoWindow(options);
-            	});
+               	//marker.openInfoWindow(options);
+               	
+               	});
            
             
             	menu.customItems.push(menuItem);
@@ -135,8 +139,8 @@
 	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
 	<maps:Map id="map" mapevent_mapready="onReady(event)"
 		key="ABQIAAAAygn08KtrPHRID57cCzRochT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQgujvgsY9T-1xHRx_tQQgNFe2vEA" left="230" top="0" bottom="0" right="0"/>
-	<ns1:markerInfo id="testy"/>
-	<ns1:LoginDialog id="test2"  x="-500" y="-500"/>
+	<ns1:markerInfo id="mInfo"/>
+	<ns1:LoginDialog id="login"  x="-500" y="-500"/>
 	<mx:TabNavigator width="232" bottom="0" top="0" left="0" cornerRadius="0">
 		<mx:Canvas label="Map   " width="100%" height="100%">
 			<mx:Label x="10" y="10" text="Building Filter" id="lblTitle" fontFamily="Arial" fontSize="15" fontWeight="bold" textDecoration="underline"/>
