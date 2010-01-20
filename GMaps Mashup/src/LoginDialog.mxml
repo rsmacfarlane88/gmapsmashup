@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" cornerRadius="8" borderStyle="solid" backgroundColor="#FFFFFF">
+
+<mx:Script>
+	<![CDATA[
+		
+		private function selectedLoginType(e:Event):void
+		{
+			if(rbLogin.selected == true){
+				txtUsername.enabled = true;
+				txtPassword.enabled = true;
+			} else if(rbGuest.selected == true){
+				txtUsername.enabled = false;
+				txtPassword.enabled = false;
+			}
+		}
+		
+		private function login_Click(e:MouseEvent):void
+		{
+			loginService.send();
+		}
+		
+		private function cancel_Click(e:MouseEvent):void
+		{
+			this.visible = false;
+		}
+	]]>
+</mx:Script>
+
+
+	<mx:Label x="10" y="10" text="Welcome to Heriot-Watt University campus map" id="lblTitle" width="380" height="22" fontSize="14" fontFamily="Arial" fontWeight="bold"/>
+	<mx:Label x="51" y="180" text="Username" id="lblUsername" width="102" textAlign="right"/>
+	<mx:Label x="51" y="210" text="Password" id="lblPassword" width="102" textAlign="right"/>
+	
+	<mx:TextInput x="161" y="208" displayAsPassword="true" maxChars="30" enabled="true" id="txtPassword"/>
+	<mx:TextInput x="161" y="178" id="txtUsername" maxChars="30" enabled="true"/>
+	<mx:Label x="10" y="40" text="Please Login or select guest account" id="lblTitle2" fontSize="10" fontStyle="normal"/>
+	<mx:RadioButtonGroup id="radiogroup1" change="selectedLoginType(event)" />
+	<mx:RadioButton id="rbLogin" x="120" y="68" label="Login" groupName="radiogroup1"  selected="true" />
+	<mx:RadioButton id="rbGuest" x="120" y="98" label="Guest" groupName="radiogroup1" selected="false" />
+	<mx:HRule x="40" y="144" width="320"/>
+	<mx:Button x="120" y="259" label="Login" id="btnLogin" click="login_Click(event)"/>
+	<mx:Button x="215" y="259" label="Cancel" id="btnCancel" click="cancel_Click(event)"/>
+	<mx:HTTPService id="loginService" url="loginValidate.php" />
+	
+</mx:Canvas>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" layout="absolute" 
+	xmlns:maps="com.google.maps.*" xmlns:ns1="*" width="100%" height="100%">
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import com.google.maps.InfoWindowOptions;
+    	import com.google.maps.overlays.Marker;
+    	import com.google.maps.MapMouseEvent;
+   
+    	import com.google.maps.LatLng;
+    	import com.google.maps.Map;
+    	import com.google.maps.MapEvent;
+    	import com.google.maps.MapType;
+    	import com.google.maps.controls.PositionControl;
+    	import com.google.maps.controls.ZoomControl;
+    	import com.google.maps.controls.MapTypeControl;
+    	import com.google.maps.overlays.*;
+    	import com.google.maps.styles.*;
+    	import mx.rpc.events.ResultEvent;
+    	import flash.net.navigateToURL;
+      	import mx.events.ListEvent;
+      	import mx.controls.Alert;
+      	import mx.utils.ObjectUtil;
+      	import mx.rpc.events.FaultEvent;
+      	import mx.collections.ArrayCollection;
+      	import mx.core.Application;
+    		
+			
+			//[Embed(source="sport_Icon.png")]
+			//private var sportIcon:Class;
+			
+			private function init():void{
+				testy.visible=false;
+				test2.visible = false;
+			}
+			
+			private function onReady(e:MapEvent):void
+			{
+				
+				map.setCenter(new LatLng(55.912275, -3.322325), 17, MapType.SATELLITE_MAP_TYPE);
+				map.addControl(new ZoomControl());
+				map.addControl(new MapTypeControl());
+				service.send();
+				addContextMenu();
+				
+				test2.x = (Application.application.width/2) - (test2.width/2) ;
+				test2.y = (Application.application.height/2) - (test2.height/2) ;
+				test2.visible = true;
+			}
+			
+			private function addContextMenu():void {
+            	var menu:ContextMenu = new ContextMenu();
+           
+            	var latlng:LatLng;
+            	menu.addEventListener(ContextMenuEvent.MENU_SELECT, function(e:ContextMenuEvent):void {
+               		latlng = map.fromViewportToLatLng(new Point(e.mouseTarget.mouseX, e.mouseTarget.mouseY));
+            	});
+            
+            	var menuItem:ContextMenuItem = new ContextMenuItem('Add Marker');
+            	menuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(e:ContextMenuEvent):void {
+               	testy.x = e.mouseTarget.mouseX;
+               	testy.y = e.mouseTarget.mouseY;
+               	testy.markerLatLng = map.fromViewportToLatLng(new Point(e.mouseTarget.mouseX,e.mouseTarget.mouseY));
+               	testy.visible=true;
+               
+               	var marker:Marker = new Marker(latlng);
+               	var options:InfoWindowOptions = new InfoWindowOptions({
+                
+                customOffset: new Point(0, 10),
+                width: 320,
+                height: 220,
+                drawDefaultFrame: true
+            	});
+            
+ 				marker.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
+                	marker.openInfoWindow(options); 
+ 				});
+               	map.addOverlay(marker);
+               	marker.openInfoWindow(options);
+            	});
+           
+            
+            	menu.customItems.push(menuItem);
+            	menu.hideBuiltInItems();
+            	this.map.contextMenu = menu;
+        	}
+			
+			private function onResult(e:ResultEvent):void
+			{
+				var list:ArrayCollection = e.result.map.loc;
+				for(var i:int=0; i<list.length; i++)
+				{
+					//var bm:Bitmap = new sportIcon() as Bitmap;
+					var m:Marker = new Marker(new LatLng(list[i].lat, list[i].lon),
+												new MarkerOptions({tooltip:list[i].name + "\n"+list[i].description,
+													strokeStyle: new StrokeStyle({color: 0xffffff}),
+                  									fillStyle: new FillStyle({color: 0x0099ff, alpha: 0.8}),
+                  									radius: 8,
+                  									hasShadow: true,
+                  									//icon:bm,
+													iconOffset:new Point(-59, -31) }));
+					
+					var options:InfoWindowOptions = new InfoWindowOptions({
+													titleHTML:""+list[i].name,
+													contentHTML:""+list[i].description,
+													cornerRadius: 20,
+                									width: 320,
+                									height: 220,
+                									drawDefaultFrame: true });
+					
+					
+					createMarker(m,options);
+					
+					
+
+ 				
+ 				}
+
+			}
+			
+			private function createMarker(m:Marker, o:InfoWindowOptions):void
+			{
+				m.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
+                		m.openInfoWindow(o);
+                	});
+                	
+                	 map.addOverlay(m);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
+	<maps:Map id="map" mapevent_mapready="onReady(event)"
+		key="ABQIAAAAygn08KtrPHRID57cCzRochT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQgujvgsY9T-1xHRx_tQQgNFe2vEA" left="230" top="0" bottom="0" right="0"/>
+	<ns1:markerInfo id="testy"/>
+	<ns1:LoginDialog id="test2"  x="-500" y="-500"/>
+	<mx:TabNavigator width="232" bottom="0" top="0" left="0" cornerRadius="0">
+		<mx:Canvas label="Map   " width="100%" height="100%">
+			<mx:Label x="10" y="10" text="Building Filter" id="lblTitle" fontFamily="Arial" fontSize="15" fontWeight="bold" textDecoration="underline"/>
+			<mx:CheckBox x="10" y="42" label="Department Buildings"/>
+			<mx:CheckBox x="10" y="72" label="Admissions office"/>
+			<mx:CheckBox x="10" y="102" label="Shop"/>
+			<mx:CheckBox x="10" y="132" label="Bank"/>
+			<mx:CheckBox x="10" y="162" label="Food"/>
+			<mx:CheckBox x="10" y="192" label="Drink and Entertainment"/>
+			<mx:CheckBox x="10" y="222" label="Leisure Center"/>
+		</mx:Canvas>
+		<mx:Canvas label="Videos" width="100%" height="100%" cornerRadius="0">
+			<mx:Label x="10" y="10" text="Uploaded Videos will show here"/>
+		</mx:Canvas>
+		<mx:Canvas label="Pictures" width="100%" height="100%">
+			<mx:Label x="10" y="10" text="Uploaded Pictures will show here"/>
+		</mx:Canvas>
+	</mx:TabNavigator>
+	
+	
+</mx:Application>
