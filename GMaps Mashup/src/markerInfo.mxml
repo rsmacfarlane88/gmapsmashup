@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" x="-500" y="-500" width="296" height="254"
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" x="28" y="151" width="296" height="254"
 	 cornerRadius="12" borderStyle="solid" alpha="0.76" backgroundAlpha="1.0" backgroundColor="#FFFFFF">
 	
 	<mx:Script>
