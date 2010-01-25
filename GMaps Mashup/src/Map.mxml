@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" layout="absolute" 
-	xmlns:maps="com.google.maps.*" xmlns:ns1="*" xmlns:custom="custom.*" width="100%" height="100%">
+	xmlns:maps="com.google.maps.*" xmlns:ns1="*" xmlns:custom="custom.*" width="100%" height="100%" backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#999999, #000000]">
+	<mx:Style source="../assets/css/test.css"/>
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Text;
@@ -27,11 +28,27 @@
       	import mx.collections.ArrayCollection;
       	import mx.core.Application;
     		
+			[Embed(source="../images/uni.png")]
+			public var icon1:Class;
+			[Embed(source="../images/glass_numbers_2.png")]
+			public var icon2:Class;
+			[Embed(source="../images/shop.png")]
+			public var icon3:Class;
+			[Embed(source="../images/food.png")]
+			public var icon4:Class;
+			[Embed(source="../images/entertain.png")]
+			public var icon5:Class;
+			[Embed(source="../images/bank.png")]
+			public var icon6:Class;
+			[Embed(source="../images/computer.png")]
+			public var icon7:Class;
+			[Embed(source="../images/bus.png")]
+			public var icon8:Class;
+			[Embed(source="../images/park_icon.png")]
+			public var icon9:Class;
 			
-			//[Embed(source="sport_Icon.png")]
-			//private var sportIcon:Class;
 			public var marker:Marker;
-			
+			public var customUI:MyCustomInfoWindow = new MyCustomInfoWindow();
 			
 			private function init():void{
 				mInfo.visible=false;
@@ -94,25 +111,44 @@
 			
 			private function onResult(e:ResultEvent):void
 			{
-				var customUI:MyCustomInfoWindow = new MyCustomInfoWindow();
+				iconSelector.defineIcons();
 				var list:ArrayCollection = e.result.map.loc;
-				
-				
-				
+
 				for(var i:int=0; i<list.length; i++)
 				{
+
 					
+					if(list[i].category == 1){
+						var bm:Bitmap = new icon1 as Bitmap;
+					}else if(list[i].category == 2){
+						var bm:Bitmap = new icon2 as Bitmap;
+					}else if(list[i].category == 3){
+						var bm:Bitmap = new icon3 as Bitmap;
+					}else if(list[i].category == 4){
+						var bm:Bitmap = new icon4 as Bitmap;
+					}else if(list[i].category == 5){
+						var bm:Bitmap = new icon5 as Bitmap;
+					}else if(list[i].category == 6){
+						var bm:Bitmap = new icon6 as Bitmap;
+					}else if(list[i].category == 7){
+						var bm:Bitmap = new icon7 as Bitmap;
+					}else if(list[i].category == 8){
+						var bm:Bitmap = new icon8 as Bitmap;
+					}else if(list[i].category == 9){
+						var bm:Bitmap = new icon9 as Bitmap;
+					}
 					
-					//var bm:Bitmap = new sportIcon() as Bitmap;
 					var m:Marker = new Marker(new LatLng(list[i].lat, list[i].lon),
 												new MarkerOptions({tooltip:list[i].name + "\n"+list[i].description,
 													strokeStyle: new StrokeStyle({color: 0xffffff}),
                   									fillStyle: new FillStyle({color: 0x0099ff, alpha: 0.8}),
                   									radius: 8,
                   									hasShadow: true,
-                  									//icon:bm,
-													iconOffset:new Point(-59, -31) }));
+                  									icon:bm,
+													iconOffset:new Point(-15, -15) 
+													}));
 					
+					 //this.customUI.txtTitle = list[i].description;
 					
 					
 					var options:InfoWindowOptions = new InfoWindowOptions({
@@ -139,13 +175,9 @@
 			private function createMarker(m:Marker, o:InfoWindowOptions, array:ArrayCollection, index:int):void
 			{
 				
-				var customUI:MyCustomInfoWindow = new MyCustomInfoWindow();
-				
 				
 				m.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
-						
                 		m.openInfoWindow(o);
-                		customUI.loadInfoWindow(array,index);
                 	});
                 	
                 	 map.addOverlay(m);
@@ -156,30 +188,37 @@
 	</mx:Script>
 	
 	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
-	<maps:Map id="map" mapevent_mapready="onReady(event)"
-		key="ABQIAAAAygn08KtrPHRID57cCzRochT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQgujvgsY9T-1xHRx_tQQgNFe2vEA" left="230" top="0" bottom="0" right="0"/>
-	<ns1:markerInfo id="mInfo" x="-500" y="-500"/>
+	
+	
+	<mx:Panel layout="absolute" right="10" bottom="10" top="10" left="285">
+		<!--<maps:Map id="map" mapevent_mapready="onReady(event)"
+		key="ABQIAAAAygn08KtrPHRID57cCzRochT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQgujvgsY9T-1xHRx_tQQgNFe2vEA" left="0" top="0" bottom="0" right="0"/>-->
+		<maps:Map id="map" mapevent_mapready="onReady(event)"
+		key="ABQIAAAAMeHAUcDLD4VmHkcsoSxH7BTW3dTYpunvZ9O_C1Wlk1wzOXD1_xS9PEov6ILo2cQ-l5623GjC7veBgQ" left="0" top="0" bottom="0" right="0"/>
+	</mx:Panel>
+	<mx:Panel layout="absolute" left="10" top="10" bottom="10" width="250">
+		<mx:TabNavigator cornerRadius="0" left="0" bottom="0" top="0" width="230">
+			<mx:Canvas label="Map   " width="100%" height="100%">
+				<mx:Label x="10" y="10" text="Building Filter" id="lblTitle" fontFamily="Arial" fontSize="15" fontWeight="bold" textDecoration="underline"/>
+				<mx:CheckBox x="10" y="42" label="Department Buildings"/>
+				<mx:CheckBox x="10" y="72" label="Admissions office"/>
+				<mx:CheckBox x="10" y="102" label="Shop"/>
+				<mx:CheckBox x="10" y="132" label="Bank"/>
+				<mx:CheckBox x="10" y="162" label="Food"/>
+				<mx:CheckBox x="10" y="192" label="Drink and Entertainment"/>
+				<mx:CheckBox x="10" y="222" label="Leisure Center"/>
+			</mx:Canvas>
+			<mx:Canvas label="Videos" width="100%" height="100%" cornerRadius="0">
+				<mx:Label x="10" y="10" text="Uploaded Videos will show here"/>
+				<mx:TileList x="14" y="36" height="562"></mx:TileList>
+			</mx:Canvas>
+			<mx:Canvas label="Pictures" width="100%" height="100%">
+				<mx:Label x="10" y="10" text="Uploaded Pictures will show here"/>
+				<mx:TileList x="14" y="36" height="562"></mx:TileList>
+			</mx:Canvas>
+		</mx:TabNavigator>
+	</mx:Panel>
+	<ns1:AddMarkerInfoDialogue id="mInfo" x="-500" y="-500"/>
 	<ns1:LoginDialog id="login"  x="-500" y="-500"/>
-	<mx:TabNavigator width="232" bottom="0" top="0" left="0" cornerRadius="0">
-		<mx:Canvas label="Map   " width="100%" height="100%">
-			<mx:Label x="10" y="10" text="Building Filter" id="lblTitle" fontFamily="Arial" fontSize="15" fontWeight="bold" textDecoration="underline"/>
-			<mx:CheckBox x="10" y="42" label="Department Buildings"/>
-			<mx:CheckBox x="10" y="72" label="Admissions office"/>
-			<mx:CheckBox x="10" y="102" label="Shop"/>
-			<mx:CheckBox x="10" y="132" label="Bank"/>
-			<mx:CheckBox x="10" y="162" label="Food"/>
-			<mx:CheckBox x="10" y="192" label="Drink and Entertainment"/>
-			<mx:CheckBox x="10" y="222" label="Leisure Center"/>
-		</mx:Canvas>
-		<mx:Canvas label="Videos" width="100%" height="100%" cornerRadius="0">
-			<mx:Label x="10" y="10" text="Uploaded Videos will show here"/>
-			<mx:TileList x="14" y="36" height="562"></mx:TileList>
-		</mx:Canvas>
-		<mx:Canvas label="Pictures" width="100%" height="100%">
-			<mx:Label x="10" y="10" text="Uploaded Pictures will show here"/>
-			<mx:TileList x="14" y="36" height="562"></mx:TileList>
-		</mx:Canvas>
-	</mx:TabNavigator>
-	
-	
+	<custom:IconSelector id="iconSelector" />
 </mx:Application>

@@ -22,12 +22,12 @@
 		{
 			if(e.result.loginsuccess == "yes")
 			{
-				//msgValid.visible = true;
+				msgValid.visible = true;
 				
 				this.r1.play([this]);
 				this.removeAllChildren();
 				
-				//currentState = "Logged In";
+				//currentState = "loggedin";
 			}
 			
 			if(e.result.loginsuccess == "no")
@@ -40,6 +40,7 @@
 		private function cancel_Click(e:MouseEvent):void
 		{
 			this.visible = false;
+			//currentState = "loggedin";
 		}
 	]]>
 </mx:Script>

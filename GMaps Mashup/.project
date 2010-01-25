@@ -21,5 +21,10 @@
 			<type>2</type>
 			<location>C:/wamp/www/mapsTester-debug</location>
 		</link>
+		<link>
+			<name>bin-release</name>
+			<type>2</type>
+			<location>C:/wamp/www/GMaps Mashup</location>
+		</link>
 	</linkedResources>
 </projectDescription>

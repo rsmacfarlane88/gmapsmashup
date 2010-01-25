@@ -30,6 +30,8 @@
 				
 				if(txtName.text != "" && txtDescription.text != ""){
 					valid = true;
+				}else{
+					msgInvalid.visible = true;
 				}
 				
 				if(valid == true){
@@ -78,6 +80,7 @@
 	<mx:TextInput x="124" y="87" id="txtDescription" fontFamily="Arial" fontSize="11"/>
 	<mx:Label x="10" y="117" text="Marker Type" width="106" id="lblType" height="21" fontFamily="Arial" fontSize="12" textAlign="right"/>
 	<mx:ComboBox id="cbCategory" x="124" y="117" width="160" dataProvider="{list}" selectedIndex="0" labelField="cat" />
+	<mx:Label x="10" y="161" visible="false" color="red" text="Please enter all details for the marker" width="274" textAlign="center" id="msgInvalid"/>
 	
 
 	

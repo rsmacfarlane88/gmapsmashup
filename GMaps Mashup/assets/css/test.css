@@ -1,0 +1,22 @@
+/* CSS file */
+Application {
+   
+  
+   
+   color: #333333;
+}
+
+Panel {
+   borderColor: #ffffff;
+   roundedBottomCorners: true;
+   cornerRadius: 6;
+   shadowDistance: 4;
+   titleStyleName: "mypanelTitle";
+}
+
+.mypanelTitle {
+   letterSpacing: 1;
+   fontSize: 14;
+   fontWeight: bold;
+}
+
