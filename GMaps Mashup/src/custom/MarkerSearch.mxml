@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="100" title="Search">
+	
+	<mx:Script>
+		<![CDATA[
+		
+			import flash.utils.setTimeout;            
+            import mx.controls.Alert;
+            
+            
+
+			private function onKeyUp(e:KeyboardEvent):void
+			{
+				
+			}
+			
+			private function onKeyDown(e:KeyboardEvent):void
+			{
+				
+			}
+			
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:TextInput x="10" y="10" height="40" width="360" text="Search Here...." id="txtSearch" fontSize="26" fontFamily="Arial" keyDown="onKeyDown( event )"
+            keyUp="onKeyUp( event )"/>
+	<mx:DataGrid id="dgUserRequest" 
+            headerHeight="0" 
+            y="{txtsearch.y + txtSearch.height + 1}" left="10" right="10"
+            visible="false"
+            dataProvider="{ request.lastResult.keywords.search }">
+            <mx:columns>
+                <mx:DataGridColumn headerText="Keyword" dataField="searchTerm"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+</mx:Panel>

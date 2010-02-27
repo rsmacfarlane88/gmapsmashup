@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" x="28" y="151" width="296" height="254"
+	 cornerRadius="12" borderStyle="solid" alpha="0.76" backgroundAlpha="1.0" backgroundColor="#FFFFFF">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			import mx.collections.ArrayCollection;
+			import com.google.maps.LatLng;
+			import mx.core.Application;
+		
+			private var markerName:String;
+			public var markerLatLng:LatLng;
+			[Bindable]private var list:ArrayCollection;
+			
+			private function init():void
+			{
+				categoryProvider.send();
+			}
+			
+			private function onResult(e:ResultEvent):void
+			{
+				list = e.result.markerCategory.category;		
+			}
+			
+			private function onSubmit(e:MouseEvent):void
+			{
+				var valid:Boolean = false;
+				var category:int;
+				
+				if(txtName.text != "" && txtDescription.text != ""){
+					valid = true;
+				}else{
+					msgInvalid.visible = true;
+				}
+				
+				if(valid == true){
+					
+					markerName = txtName.text;
+					
+					category = cbCategory.selectedIndex + 1;
+					
+					addMarkerService.url = "php/Marker/addMarker.php?name="+markerName
+										+"&lat="+markerLatLng.lat()
+										+"&lng="+markerLatLng.lng()
+										+"&description="+txtDescription.text
+										+"&category="+category;
+					addMarkerService.send();
+					
+					txtName.text = "";
+					txtDescription.text = "";
+					this.visible = false;
+					
+				
+				}
+			}
+			
+			private function onCancel(e:MouseEvent):void
+			{
+				this.visible = false;
+				txtName.text = "";
+				txtDescription.text = "";
+				cbCategory.selectedIndex = 0;
+				Application.application.marker.visible = false;
+				
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Label x="10" y="10" text="Marker Information" id="lblTitle" fontFamily="Arial" fontSize="20" fontWeight="bold" textDecoration="underline"/>
+	<mx:Label x="10" y="60" text="Name" id="lblName" fontFamily="Arial" fontSize="12" width="106" textAlign="right"/>
+	<mx:TextInput x="124" y="59" id="txtName" maxChars="255" fontFamily="Arial" fontSize="11"/>
+	<mx:Button x="51" y="199" label="Save" id="btnSubmit" fontFamily="Arial" fontSize="12" click="onSubmit(event)" width="65"/>
+	<mx:Button x="178" y="199" label="Cancel" id="btnCancel" fontFamily="Arial" fontSize="12" click="onCancel(event)"/>
+	<mx:HTTPService id="addMarkerService" url="php/addMarker.php"/>
+	<mx:HTTPService id="categoryProvider" url="php/Marker/categorySelectionLoad.php" result="onResult(event)"/>
+	<mx:Label x="10" y="88" text="Description" id="lblDescription" fontFamily="Arial" fontSize="12" textAlign="right" width="106"/>
+	<mx:TextInput x="124" y="87" id="txtDescription" fontFamily="Arial" fontSize="11"/>
+	<mx:Label x="10" y="117" text="Marker Type" width="106" id="lblType" height="21" fontFamily="Arial" fontSize="12" textAlign="right"/>
+	<mx:ComboBox id="cbCategory" x="124" y="117" width="160" dataProvider="{list}" selectedIndex="0" labelField="cat" />
+	<mx:Label x="10" y="161" visible="false" color="red" text="Please enter all details for the marker" width="274" textAlign="center" id="msgInvalid"/>
+	<mx:Label x="10" y="146" text="Link" width="106" id="lblLink" height="21" fontFamily="Arial" fontSize="12" textAlign="right"/>
+	<mx:TextInput x="124" y="146" id="txtLink" text="http://" editable="true"/>
+	
+
+	
+	
+	
+</mx:Canvas>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="246" title="Register">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			import custom.PasswordGenerator;
+			import mx.core.Application;
+			
+			private var gen:PasswordGenerator = new PasswordGenerator();
+			[Bindable]private var password:String
+			[Bindable]private var username_Exists:Boolean = false;
+			[Bindable]private var password_Exists:Boolean = false;
+			[Bindable]private var email_Exists:Boolean = false;
+			private var results_List:ArrayCollection;
+			
+			public function onContinueClick(e:MouseEvent):void{
+				this.currentState = "registerHere";
+			}
+			
+			public function onCancelClick(e:MouseEvent):void{
+				Application.application.currentState = "";
+				this.currentState = "";
+			}
+			
+			private function check_Results(e:ResultEvent):void
+			{
+				 
+				Alert.show(results_List[0].username,"test",Alert.OK);
+				
+				if(e.result.CheckData.Data.password == "yes")
+				{
+					password_Exists = true;
+				}
+				if(e.result.CheckData.Data.username == "yes")
+				{
+					username_Exists = true;
+				}
+				if(e.result.CheckData.Data.email == "yes")
+				{
+					email_Exists = true;
+				}
+				
+				
+			}
+			
+			public function submit_Click(e:MouseEvent):void
+			{
+				var errorMessage:String;
+				password = gen.generatePassword(8);
+				
+				if(txtUsername.text != "" && txtEmail.text != "")
+				{
+					checkService.send();
+					
+					if(username_Exists == true || password_Exists == true || email_Exists == true)
+					{
+						if(password_Exists == true){
+							password = gen.generatePassword(8);		
+						}
+						if(email_Exists == true){
+							errorMessage += "Email address exists already\n";	
+						} 
+						if(username_Exists == true){
+							errorMessage += "Username exists already\n";
+						}
+						
+						Alert.show("Warning",errorMessage,Alert.OK);
+						
+					
+					}else{
+						sendDetails();
+					}
+					
+					
+				}else{
+					
+					Alert.show("Please enter your details before hitting submit", "Warning", Alert.OK);
+				}
+				
+				
+			}
+			
+			public function sendDetails():void
+			{
+				if(username_Exists == false && password_Exists == false && email_Exists == false){
+					registerService.send();
+					mailService.send();
+					this.txtUsername.text = "";
+					this.txtEmail.text = "";
+					Application.application.currentState = "";
+					this.currentState = "";
+				}
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:states>
+		<mx:State name="registerHere">
+			<mx:RemoveChild target="{btnContinue}"/>
+			<mx:RemoveChild target="{txtPreRegister}"/>
+			<mx:AddChild position="lastChild">
+				<mx:Label x="60" y="37" text="Username" width="92" id="lblUsername"/>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Label x="60" y="67" text="Email*" width="92" id="lblEmail"/>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:TextInput x="160" y="35" id="txtUsername" maxChars="30"/>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:TextInput x="160" y="65" id="txtEmail" width="55"/>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Button x="108.5" y="122" label="Submit" id="btnSubmit" click="submit_Click(event)"/>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Button x="214" y="122" label="Cancel" id="btnCancel" click="onCancelClick(event)"/>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Label x="214" y="67" text="@hw.ac.uk" width="106"/>
+			</mx:AddChild>
+			<mx:SetProperty name="height" value="246"/>
+			<mx:AddChild position="lastChild">
+				<mx:TextArea x="60" y="161" width="260" borderStyle="none" wordWrap="true" height="35">
+					<mx:text>*Automated email will be sent to your HW account with generated password</mx:text>
+				</mx:TextArea>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+	<mx:transitions>
+		<mx:Transition id="registerTransition"
+                fromState="*"
+                toState="registerHere">
+            <mx:Fade target="{this}"/>
+        </mx:Transition>
+        <mx:Transition id="registerTransition2"
+                fromState="registerHere"
+                toState="*">
+            <mx:Fade target="{Application.application.logindialogue1}"/>
+        </mx:Transition>
+
+	</mx:transitions>
+	
+	<mx:TextArea x="10" y="10" width="360" height="124" id="txtPreRegister" wordWrap="true" borderStyle="none">
+		<mx:text>If you are a university student and would like to use this facility to add your own points of interest on the map, then please sign up. Also could you please enter your HW username where asked and nothing else. This will send a confirmation email to your HW mail allowing you to access the application with the ability to add and change information. Thanks for your cooperation.</mx:text>
+	</mx:TextArea>
+	<mx:Button x="152" y="142" label="Continue" id="btnContinue" click="onContinueClick(event)"/>
+	<mx:HTTPService id="mailService" method="POST" url="php/Register/sendMail.php" >
+		<mx:request xmlns="">
+		<username>
+			{txtUsername.text}
+		</username>
+		<email>
+			{txtEmail.text + "@hw.ac.uk"}
+		</email>
+		<password>
+			{password}
+		</password>
+	</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService id="registerService" method="POST" url="php/Register/addUser.php">
+		<mx:request xmlns="">
+		<username>
+			{txtUsername.text}
+		</username>
+		<password>
+			{password}
+		</password>
+		<email>
+			{txtEmail.text + "@hw.ac.uk"}
+		</email>
+	</mx:request>
+	</mx:HTTPService>
+	
+	<mx:HTTPService id="checkService" method="POST" url="php/Register/checkPassword.php" result="check_Results(event)">
+		<mx:request xmlns="">
+		<username>
+			{txtUsername.text}
+		</username>
+		<password>
+			{password}
+		</password>
+		<email>
+			{txtEmail.text + "@hw.ac.uk"}
+		</email>
+	</mx:request>
+	</mx:HTTPService>
+</mx:Panel>

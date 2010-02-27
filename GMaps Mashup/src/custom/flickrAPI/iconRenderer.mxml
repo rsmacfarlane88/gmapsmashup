@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" updateComplete="init()">
+
+<mx:Script>
+	<![CDATA[
+		import com.adobe.webapis.flickr.Photo;
+		import mx.core.Application;
+		
+		public function init():void{
+			//pic.source = 'http://static.flickr.com/' + data.server + '/' + data.id + '_' + data.secret + '_m.jpg';
+			pic.source = 'http://static.flickr.com/' + data.server + '/' + data.id + '_' + data.secret + '_m.jpg';
+			//trace("source : "+pic.source)
+			pic.height = 80;
+			pic.width = 80;
+		}
+		
+	]]>
+</mx:Script>
+	<mx:Image id="pic" scaleContent="true" height="80" width="80" autoLoad="true"/>
+</mx:Box>
