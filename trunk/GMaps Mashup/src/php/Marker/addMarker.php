@@ -1,7 +1,7 @@
 <?PHP
 header("Content-type: text/xml");
 
-include ("../functions.php");
+include("../functions.php");
 
 $connection = dbConnect();
 

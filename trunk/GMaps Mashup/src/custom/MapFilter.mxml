@@ -3,6 +3,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Image;
 			import custom.flickrAPI.iconRenderer;
 			import mx.collections.ArrayCollection;
 			import mx.events.StateChangeEvent;
@@ -15,6 +16,7 @@
             import mx.core.Application;
 			
 			public var flickr:FlickrService;
+			private var icons:CustomIcons = new CustomIcons();
 			public var api_key:String = "04d48e9f26082b26bce2b7536cafaea4";
 			private var flickrSecret:String = "03cb7c68812c0b32";
 			private var service:FlickrService = new FlickrService( api_key );
@@ -81,14 +83,22 @@
 	
 	<mx:Accordion top="0" left="0" right="0" bottom="0">
 		<mx:Canvas label="Map Filter" width="100%" height="100%">
-			<mx:CheckBox x="10" y="40" label="Department Buildings" id="checkBuildings"  enabled="false"/>
-			<mx:CheckBox x="10" y="70" label="Accommodation" id="checkAccommodation" enabled="false"/>
-			<mx:CheckBox x="10" y="100" label="Shop" id="checkShop" enabled="false"/>
-			<mx:CheckBox x="10" y="190" label="Bank" id="checkBank" enabled="false"/>
-			<mx:CheckBox x="10" y="130" label="Food" id="checkFood" enabled="false"/>
-			<mx:CheckBox x="10" y="160" label="Drink and Entertainment" id="checkEntertainment" enabled="false"/>
-			<mx:CheckBox x="10" y="220" label="Parking" id="checkParking" enabled="false"/>
-			<mx:CheckBox x="10" y="10" label="All" selected="true" id="checkAll" change="filterCheck(event)"/>
+			<mx:CheckBox x="42" y="40" label="Department Buildings" id="checkBuildings"  enabled="false"/>
+			<mx:CheckBox x="42" y="70" label="Accommodation" id="checkAccommodation" enabled="false"/>
+			<mx:CheckBox x="42" y="100" label="Shop" id="checkShop" enabled="false"/>
+			<mx:CheckBox x="42" y="188" label="Bank" id="checkBank" enabled="false"/>
+			<mx:CheckBox x="42" y="130" label="Food" id="checkFood" enabled="false"/>
+			<mx:CheckBox x="42" y="158" label="Drink and Entertainment" id="checkEntertainment" enabled="false"/>
+			<mx:CheckBox x="42" y="218" label="Parking" id="checkParking" enabled="false"/>
+			<mx:CheckBox x="43" y="10" label="All" selected="true" id="checkAll" change="filterCheck(event)"/>
+			<mx:Image id="imgAll" x="10" y="10" width="24" height="24" source="{icons.all}"/>
+			<mx:Image id="imgBuilding" x="10" y="40" width="24" height="24" source="{icons.uniBuilding}"/>
+			<mx:Image id="imgAccommodation" x="10" y="70" width="24" height="24" source="{icons.accommodation}"/>
+			<mx:Image id="imgShop" x="10" y="100" width="24" height="24" source="{icons.shop}"/>
+			<mx:Image id="imgFood" x="10" y="130" width="24" height="24" source="{icons.food}"/>
+			<mx:Image id="imgEntertainment" x="10" y="160" width="24" height="24" source="{icons.entertainment}"/>
+			<mx:Image id="imgBank" x="10" y="190" width="24" height="24" source="{icons.bank}"/>
+			<mx:Image id="imgParking" x="10" y="220" width="20" height="20" source="{icons.parking}"/>
 		</mx:Canvas>
 		<mx:HDividedBox label="Video" width="100%" height="100%">
 		</mx:HDividedBox>
