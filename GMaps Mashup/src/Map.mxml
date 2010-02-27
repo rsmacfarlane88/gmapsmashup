@@ -396,14 +396,14 @@
 				</custom:MapFilter>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Panel layout="absolute" headerHeight="10" cornerRadius="8" roundedBottomCorners="true" left="285" top="35" height="58" width="416">
-					<mx:TextInput x="99" y="6" width="287" height="22" textIndent="2" fontSize="14" fontWeight="bold"/>
-					<mx:Label x="0" y="6" text="Search..." width="91" height="26" fontWeight="bold" fontSize="15" textAlign="center"/>
+				<mx:Panel layout="absolute" headerHeight="10" cornerRadius="8" roundedBottomCorners="true" left="285" top="35" height="58" right="163">
+					<mx:TextInput height="22" textIndent="2" fontSize="14" fontWeight="bold" right="10" top="6" left="99"/>
+					<mx:Label text="Search..." height="26" fontWeight="bold" fontSize="15" textAlign="center" left="0" width="91" top="6"/>
 				</mx:Panel>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Panel layout="absolute" right="31" top="35" headerHeight="9" height="58" width="172">
-					<mx:Button x="10" y="6" label="Help" height="25" width="80"/>
+				<mx:Panel layout="absolute" right="31" top="35" headerHeight="9" height="58" width="124">
+					<mx:Button x="12" y="6" label="Help" height="25" width="80"/>
 				</mx:Panel>
 			</mx:AddChild>
 		</mx:State>

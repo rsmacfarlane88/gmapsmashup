@@ -74,7 +74,7 @@
 	<mx:TextInput x="124" y="59" id="txtName" maxChars="255" fontFamily="Arial" fontSize="11"/>
 	<mx:Button x="51" y="199" label="Save" id="btnSubmit" fontFamily="Arial" fontSize="12" click="onSubmit(event)" width="65"/>
 	<mx:Button x="178" y="199" label="Cancel" id="btnCancel" fontFamily="Arial" fontSize="12" click="onCancel(event)"/>
-	<mx:HTTPService id="addMarkerService" url="php/addMarker.php"/>
+	<mx:HTTPService id="addMarkerService" url="php/Marker/addMarker.php"/>
 	<mx:HTTPService id="categoryProvider" url="php/Marker/categorySelectionLoad.php" result="onResult(event)"/>
 	<mx:Label x="10" y="88" text="Description" id="lblDescription" fontFamily="Arial" fontSize="12" textAlign="right" width="106"/>
 	<mx:TextInput x="124" y="87" id="txtDescription" fontFamily="Arial" fontSize="11"/>
