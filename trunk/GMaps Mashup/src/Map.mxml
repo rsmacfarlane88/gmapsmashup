@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" layout="absolute" 
+	xmlns:maps="com.google.maps.*" xmlns:ns1="*" xmlns:custom="custom.*" width="100%" height="100%" 
+	backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#999999, #000000]" 
+	xmlns:ns2="com.google.maps.controls.*">
+	
+	<mx:Style source="../assets/css/test.css"/>
+	<mx:Script>
+		<![CDATA[
+			import custom.RouteMapper;
+			import custom.CustomIcons;
+			import mx.controls.Image;
+			import mx.events.StateChangeEvent;
+			import mx.controls.Text;
+			import custom.MyCustomInfoWindow2;
+			import custom.MyCustomInfoWindow;
+			import com.google.maps.InfoWindowOptions;
+	    	import com.google.maps.overlays.Marker;
+	    	import com.google.maps.MapMouseEvent;
+	   
+	    	import com.google.maps.LatLng;
+	    	import com.google.maps.Map;
+	    	import com.google.maps.MapEvent;
+	    	import com.google.maps.MapType;
+	    	import com.google.maps.controls.PositionControl;
+	    	import com.google.maps.controls.ZoomControl;
+	    	import com.google.maps.controls.MapTypeControl;
+	    	import com.google.maps.overlays.*;
+	    	import com.google.maps.styles.*;
+	    	import mx.rpc.events.ResultEvent;
+	    	import flash.net.navigateToURL;
+	      	import mx.events.ListEvent;
+	      	import mx.controls.Alert;
+	      	import mx.utils.ObjectUtil;
+	      	import mx.rpc.events.FaultEvent;
+	      	import mx.collections.ArrayCollection;
+	      	import mx.core.Application;
+	      	import custom.MarkerOperations;
+	      	
+    		
+			[Embed(source="../images/food.png")]
+			public var pic:Class;
+			/*[Embed(source="../images/glass_numbers_2.png")]
+			public var icon2:Class;
+			[Embed(source="../images/shop.png")]
+			public var icon3:Class;
+			[Embed(source="../images/food.png")]
+			public var icon4:Class;
+			[Embed(source="../images/entertain.png")]
+			public var icon5:Class;
+			[Embed(source="../images/bank.png")]
+			public var icon6:Class;
+			[Embed(source="../images/computer.png")]
+			public var icon7:Class;
+			[Embed(source="../images/bus.png")]
+			public var icon8:Class;
+			[Embed(source="../images/park_icon.png")]
+			public var icon9:Class; */
+			
+			public var icons:CustomIcons = new CustomIcons;
+			public var marker:Marker;
+			public var list:ArrayCollection;
+			public var photoList:ArrayCollection;
+			public var route:RouteMapper;
+			private var markerOps:MarkerOperations;
+			
+            
+
+			
+			private function init():void{
+				mInfo.visible=false;
+				//customUI.visible = false;
+				//login.visible = false;
+			}
+			
+			private function setFilterEvents():void{
+				this.filter.checkAll.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkBuildings.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkAccommodation.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkShop.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkFood.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkEntertainment.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkBank.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkParking.addEventListener(Event.CHANGE,checkSelectedFilters);
+			}
+			
+			private function onReady(e:MapEvent):void
+			{
+				
+				map.setCenter(new LatLng(55.912275, -3.322325), 17, MapType.SATELLITE_MAP_TYPE);
+				map.addControl(new ZoomControl());
+				map.addControl(new MapTypeControl());
+				service.send();
+				photoService.send();
+				addContextMenu();
+			}
+			
+			private function addContextMenu():void {
+            	var menu:ContextMenu = new ContextMenu();
+           
+            	var latlng:LatLng;
+            	menu.addEventListener(ContextMenuEvent.MENU_SELECT, function(e:ContextMenuEvent):void {
+               		latlng = map.fromViewportToLatLng(new Point(e.mouseTarget.mouseX, e.mouseTarget.mouseY));
+            	});
+            
+            	var menuItem1:ContextMenuItem = new ContextMenuItem('Add Marker');
+	            	menuItem1.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(e:ContextMenuEvent):void {
+	               	mInfo.x = e.mouseTarget.mouseX;
+	               	mInfo.y = e.mouseTarget.mouseY;
+	               	mInfo.markerLatLng = map.fromViewportToLatLng(new Point(e.mouseTarget.mouseX,e.mouseTarget.mouseY));
+	               	mInfo.visible=true;
+	               
+	               	marker = new Marker(latlng);
+	               	var options:InfoWindowOptions = new InfoWindowOptions({
+	                
+	                customOffset: new Point(0, 10),
+	                width: 320,
+	                height: 220,
+	                drawDefaultFrame: true
+	            	});
+	            
+	 				marker.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
+	                	marker.openInfoWindow(options); 
+	                	
+	 				});
+	               	map.addOverlay(marker);
+	               	//marker.openInfoWindow(options);
+               	
+               	});
+               	
+               	var menuItem2:ContextMenuItem = new ContextMenuItem("Add Route");
+               	menuItem2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,  addRoute);
+           
+            
+            	menu.customItems.push(menuItem1);
+            	menu.customItems.push(menuItem2);
+            	menu.hideBuiltInItems();
+            	this.map.contextMenu = menu;
+        	}
+        	
+        	private function addRoute(e:ContextMenuEvent):void
+        	{
+        		route = new RouteMapper();
+        		mapPanel.addChild(route);
+        		
+        		map.addEventListener(MapMouseEvent.CLICK, route.mapClick);
+        		
+        		
+        		
+        		Alert.show("You are about to add a route to the map.\n" + 
+        				"Start by clicking each point on the map.\n" + 
+        				"End by hitting space bar.",
+        				"Route Instructions", Alert.OK);
+        				
+        		//this.addEventListener(KeyboardEvent.KEY_DOWN, route.saveRoute);
+        		
+        		map.addEventListener(MapMouseEvent.CLICK, route.routeEnd);		
+        		
+        	}
+			
+			/* private function mapClick(e:MapMouseEvent):void {
+                     var latlngClicked:LatLng = e.latLng;
+                      polyLatLngs.push(latlngClicked);
+                     drawCoordinates();
+            }
+            
+            // Toggle from Polygon PolyLine mode
+	         private function toggleDrawMode(e:Event):void {
+	           map.clearOverlays();
+	           polyShape = null;
+	           drawCoordinates();
+	         }
+
+             private function deleteLastLatLng(e:Event):void {
+                       if (polyLatLngs.length > 0) {
+                          polyLatLngs.pop();
+                      }
+                      drawCoordinates();
+                 }
+                 
+                 // Clear current Map
+                  private function clearMap(e:Event):void {
+                    map.clearOverlays();
+                    polyShape = null;
+                    polyLatLngs.length = 0;
+                }
+
+            
+            private function drawCoordinates():void {
+                       map.clearOverlays();
+                       if (polyLatLngs.length > 1) {
+                           //Re-create Polyline/Polygon
+                            polygonMode = drawmode_polygon.selected;
+                          if (polygonMode) {
+                            polyShape = new Polygon(polyLatLngs);
+                          } else {
+                            polyShape = new Polyline(polyLatLngs);
+                          }
+                          map.addOverlay(polyShape);
+                       }
+                       
+                       if (polyLatLngs.length > 0) {
+                          // Grab last point of polyPoints to add new marker
+                          var tmpLatLng:LatLng = polyLatLngs[polyLatLngs.length -1];
+                          map.addOverlay(new Marker(tmpLatLng));
+                      }
+                   } */
+
+
+			
+			private function onPhotoResult(e:ResultEvent):void
+			{
+				photoList = e.result.photos.photo;
+			}
+			
+			private function onResult(e:ResultEvent):void
+			{
+				list = e.result.map.loc;
+				
+				
+				for(var i:int=0; i<list.length; i++)
+				{
+					source = "";
+					var m:Marker = new Marker(new LatLng(list[i].lat, list[i].lon),
+												new MarkerOptions({tooltip:list[i].name + "\n"+list[i].description,
+													strokeStyle: new StrokeStyle({color: 0xffffff}),
+                  									fillStyle: new FillStyle({color: 0x0099ff, alpha: 0.8}),
+                  									radius: 8,
+                  									hasShadow: true,
+                  									icon:icons.chooseIcon(list[i].category),
+													iconOffset:new Point(-15, -15) 
+													}));
+					
+					
+					
+					
+					var html:String = "<p><b>    "+list[i].name+"</b></p><p>" + 
+							"<img src='http://farm3.static.flickr.com/2779/4328471540_c52af27405_b.jpg' width='150' height='110' align='left' hspace='0' vspace='10'><br>"
+							+list[i].description+"</p>";
+					//http://www.flickr.com/photos/46753641@N02/4328471540/
+					var index:int = i;
+					var source:String;
+					for(var j:int=0; j<photoList.length; j++)
+					{
+						if (photoList[j].markerID == list[index].id)
+						{
+							source = photoList[j].url;
+						}
+					}
+					
+					
+					var options:InfoWindowOptions = new InfoWindowOptions({
+													
+													//contentHTML:html,
+													customContent: new MyCustomInfoWindow(list[i].name,source,list[i].description),
+													cornerRadius: 20,
+                									width: 320,
+                									height: 220,
+                									drawDefaultFrame: true });
+					
+					
+					
+					createMarker(m,options, list, i);
+					
+ 				}
+
+			}
+			
+			 private function createMarker(m:Marker, o:InfoWindowOptions, array:ArrayCollection, index:int):void
+			{
+				m.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
+                		m.openInfoWindow(o);
+                	});
+                	
+                	 map.addOverlay(m);
+			} 
+			
+			private function checkSelectedFilters(e:Event):void
+			{
+				this.map.clearOverlays();
+				var category:int;
+				
+				// Check if all checkbox is selected
+				//If it is send the service which is sent at the start to show all markers
+				if(filter.checkAll.selected == true){
+					this.service.send();
+				//If it is not selected then clear the map and check all the other checkboxes
+				}else if (filter.checkAll.selected == false){
+					this.map.clearOverlays();
+					
+					//start checking other checkboxes for selected
+					if(this.filter.checkBuildings.selected == true){
+						category = 1;
+						displaySelectedFilters(category);	
+					}
+					if(this.filter.checkAccommodation.selected == true){
+						category = 2;
+						displaySelectedFilters(category);	
+					}
+					if(this.filter.checkShop.selected == true){
+						category = 3;
+						displaySelectedFilters(category);	
+					}
+					if(this.filter.checkFood.selected == true){
+						category = 4;
+						displaySelectedFilters(category);	
+					}
+					if(this.filter.checkEntertainment.selected == true){
+						category = 5;
+						displaySelectedFilters(category);	
+					}
+					if(this.filter.checkBank.selected == true){
+						category = 6;
+						displaySelectedFilters(category);	
+					}
+					if(this.filter.checkParking.selected == true){
+						category = 9;
+						displaySelectedFilters(category);	
+					}
+					
+				
+				} 
+
+			}
+			
+			private function displaySelectedFilters(category:int):void
+			{
+				
+				var cat:int = category;
+				
+				for(var i:int=0; i<list.length; i++)
+				{
+					
+					if (list[i].category == cat){
+						
+						var m:Marker = new Marker(new LatLng(list[i].lat, list[i].lon),
+												new MarkerOptions({tooltip:list[i].name + "\n"+list[i].description,
+													strokeStyle: new StrokeStyle({color: 0xffffff}),
+                  									fillStyle: new FillStyle({color: 0x0099ff, alpha: 0.8}),
+                  									radius: 8,
+                  									hasShadow: true,
+                  									icon:icons.chooseIcon(list[i].category),
+													iconOffset:new Point(-15, -15) 
+													}));
+					
+						var index = i;
+					var source:String;
+					for(var j:int=0; j<photoList.length; j++)
+					{
+						if (photoList[j].markerID == list[index].id)
+						{
+							source = photoList[j].url;
+						}
+					}
+						
+						var options:InfoWindowOptions = new InfoWindowOptions({
+													customContent:new MyCustomInfoWindow(list[i].name,source,list[i].description),
+													cornerRadius: 20,
+                									width: 320,
+                									height: 220,
+                									drawDefaultFrame: true });
+					
+						
+						createMarker(m,options, list, i);
+					}
+ 				}
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
+	<mx:HTTPService id="photoService" url="php/photoLoad.php" result="onPhotoResult(event)" />
+	
+	
+	<custom:LoginDialogue horizontalCenter="0" verticalCenter="4" id="logindialogue1">
+	</custom:LoginDialogue>
+	
+	<mx:states>
+		<mx:State id="loggedin" name="loggedin">
+			<mx:RemoveChild target="{logindialogue1}"/>
+			<mx:AddChild id="addChild1" position="lastChild">
+				<mx:Panel id="mapPanel" title="Campus Map" layout="absolute" right="31" bottom="26" top="101" left="285">
+					<!--<maps:Map id="map" mapevent_mapready="onReady(event)"
+					key="ABQIAAAAygn08KtrPHRID57cCzRochT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQgujvgsY9T-1xHRx_tQQgNFe2vEA" left="0" top="0" bottom="0" right="0"/>-->
+					<!-- HW Key <maps:Map id="map" mapevent_mapready="onReady(event)"
+					key="ABQIAAAAMeHAUcDLD4VmHkcsoSxH7BTW3dTYpunvZ9O_C1Wlk1wzOXD1_xS9PEov6ILo2cQ-l5623GjC7veBgQ" left="0" top="0" bottom="0" right="0"/>-->
+					<maps:Map id="map" mapevent_mapready="onReady(event)" 
+					key="ABQIAAAAMeHAUcDLD4VmHkcsoSxH7BRsOTIY7FFhIYUrWDWOjhrIyIvjuBT8y5lNdU2K4WmNzOZFI9L7yVdqeQ" left="0" top="0" bottom="0" right="0"/>
+					<ns1:AddMarkerInfoDialogue id="mInfo" x="-500" y="-500"/>
+				</mx:Panel>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<custom:MapFilter id="filter" creationComplete="setFilterEvents()" left="32" top="35" bottom="26" width="228">
+				</custom:MapFilter>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Panel layout="absolute" headerHeight="10" cornerRadius="8" roundedBottomCorners="true" left="285" top="35" height="58" width="416">
+					<mx:TextInput x="99" y="6" width="287" height="22" textIndent="2" fontSize="14" fontWeight="bold"/>
+					<mx:Label x="0" y="6" text="Search..." width="91" height="26" fontWeight="bold" fontSize="15" textAlign="center"/>
+				</mx:Panel>
+			</mx:AddChild>
+			<mx:AddChild position="lastChild">
+				<mx:Panel layout="absolute" right="31" top="35" headerHeight="9" height="58" width="172">
+					<mx:Button x="10" y="6" label="Help" height="25" width="80"/>
+				</mx:Panel>
+			</mx:AddChild>
+		</mx:State>
+		<mx:State name="register">
+			<mx:RemoveChild target="{logindialogue1}"/>
+			<mx:AddChild position="lastChild">
+				<ns1:Register id="register" verticalCenter="2" horizontalCenter="0">
+				</ns1:Register>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+	
+	<mx:transitions>
+		<mx:Transition id="loginTransition"
+                fromState="*"
+                toState="loggedin">
+            <mx:Iris target="{mapPanel}"/>
+        </mx:Transition>
+        <mx:Transition id="loginTransition2"
+                fromState="*"
+                toState="loggedin">
+            <mx:Iris target="{filter}"/>
+        </mx:Transition>
+        <mx:Transition id="loginTransition3"
+                fromState="*"
+                toState="register">
+            <mx:Fade target="{register}"/>
+        </mx:Transition>
+
+	</mx:transitions>
+	
+	
+
+<!--	<mx:HBox id="route_controller">  
+   <mx:RadioButton
+       id="drawmode_polygon"
+    groupName="drawmode"
+    label="Polygon"
+    selected="true"
+    click="toggleDrawMode(event);" 
+    
+   />
+   <mx:RadioButton
+       id="drawmode_polyline"
+    groupName="drawmode"
+    label="Polyline"
+    click="toggleDrawMode(event);" 
+   />
+   <mx:Button
+     label="Clear Map"
+     click="clearMap(event);"
+      />
+      <mx:Button
+     label="Delete Last Point"
+     click="deleteLastLatLng(event);"
+      />
+      </mx:HBox>-->
+
+	
+</mx:Application>

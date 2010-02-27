@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="270" height="220" cornerRadius="14" 
+	borderStyle="solid" backgroundColor="#FFFFFF" borderThickness="2" borderColor="#7D7D7D" 
+	creationComplete="init()">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			import custom.RouteMapper;
+			import mx.controls.Alert;
+			
+			[Bindable]public var list:ArrayCollection;
+			public var last:ArrayCollection;
+			[Bindable]private var save:RouteMapper = new RouteMapper();
+			private var names:String;
+			private var description:String;
+			
+			private function init():void
+			{
+				routeCategoryService.send();
+			}
+			
+			private function onResult(e:ResultEvent):void
+			{
+				list = e.result.routeCategory.category;
+			}
+			
+			private function lastRouteResult(e:ResultEvent):void
+			{
+				last = e.result.route.lastRoute;
+				Alert.show(""+last[0],last[0],Alert.OK);
+			}
+			
+			private function checkLastResult(e:ResultEvent):void
+			{
+				lastRouteSaved.send();
+			}
+			
+			private function onSubmit(e:MouseEvent):void
+			{
+				names = txtName.text;
+				description = txtDescription.text;
+				routeDetails.send();
+				
+				
+				
+				
+			}
+			
+			private function onCancel(e:MouseEvent):void
+			{
+				this.visible = false;
+				this.txtName.text = "";
+				this.txtDescription.text = "";
+				this.cbCategory.selectedIndex = 0;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Label x="10" y="10" text="Route Details" width="228" height="22" fontSize="12" fontWeight="bold"/>
+	<mx:Label x="17" y="87" text="Name" width="66" textAlign="right"/>
+	<mx:Label x="17" y="113" text="Description" textAlign="right"/>
+	<mx:Label x="17" y="139" text="Category" width="66" textAlign="right"/>
+	<mx:TextInput x="91" y="85" id="txtName" cornerRadius="6" borderStyle="solid"/>
+	<mx:TextInput x="91" y="111" id="txtDescription" borderStyle="solid" cornerRadius="6"/>
+	<mx:Button x="46" y="177" label="Submit" click="onSubmit(event)"/>
+	<mx:Button x="159" y="177" label="Cancel" click="onCancel(event)"/>
+	<mx:ComboBox x="91" y="137" id="cbCategory" labelField="cat" selectedIndex="0" dataProvider="{list}" width="160"/>
+	
+	<mx:HTTPService id="routeCategoryService" url="php/Route/routeCategorySelection.php" result="onResult(event)"/>
+	<mx:TextArea x="10" y="49" width="248" height="19" text="Please enter the route details..." borderStyle="none"/>
+	<mx:HTTPService id="routeDetails" url="php/Route/sendRouteDetails.php" method="POST" showBusyCursor="true" result="checkLastResult(event)">
+		<mx:request xmlns="">
+		<name>
+			{txtName.text}
+		</name>
+		<description>
+			{txtDescription.text}
+		</description>
+		<category>
+			{cbCategory.selectedIndex+1}
+		</category>
+	</mx:request>
+	</mx:HTTPService>
+	<mx:HTTPService id="lastRouteSaved" url="php/Route/lastRoute.php" method="POST" result="lastRouteResult(event)">
+		<mx:request xmlns="">
+		<name>
+			{names}
+		</name>
+		<description>
+			{description}
+		</description>
+		<category>
+			{cbCategory.selectedIndex+1}
+		</category>
+		</mx:request>
+	</mx:HTTPService>
+</mx:Canvas>

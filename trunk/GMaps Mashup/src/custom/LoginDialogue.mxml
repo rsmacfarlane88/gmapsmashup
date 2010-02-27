@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="312" title="Welcome to Heriot-Watt University campus map">
+	
+	<mx:Script>
+	<![CDATA[
+		import mx.collections.ArrayCollection;
+		import mx.rpc.events.ResultEvent;
+		import mx.core.Application;
+		
+		
+		private function selectedLoginType(e:Event):void
+		{
+			if(rbLogin.selected == true){
+				txtUsername.enabled = true;
+				txtPassword.enabled = true;
+			} else if(rbGuest.selected == true){
+				txtUsername.enabled = false;
+				txtPassword.enabled = false;
+			}
+		}
+		
+		private function onResult(e:ResultEvent):void
+		{
+			if(e.result.loginsuccess == "yes")
+			{
+				msgValid.visible = true;
+				
+				this.r1.play([this]);
+				this.removeAllChildren();
+				Application.application.currentState = "loggedin";
+				
+			}
+			
+			if(e.result.loginsuccess == "no")
+			{
+				//mx.controls.Alert.show("Invalid username/password");
+				msgInvalid.visible = true;
+			}			
+		}
+		
+		private function cancel_Click(e:MouseEvent):void
+		{
+			this.visible = false;
+			Application.application.currentState = "loggedin";
+		}
+		
+		private function register_Click(e:MouseEvent):void
+		{
+			Application.application.currentState = "register";
+		}
+	]]>
+</mx:Script>
+	<mx:Fade id="r1" alphaFrom="1.0" alphaTo="0.0" effectEnd="this.visible = false"/>
+	<mx:Label x="40" y="130" text="Username" id="lblUsername" width="102" textAlign="right"/>
+	<mx:Label x="40" y="160" text="Password" id="lblPassword" width="102" textAlign="right"/>
+	<mx:Label id="msgValid" text="Thank you for logging in!" visible="false" color="green"  x="126" y="189" height="20"/>
+	<mx:Label id="msgInvalid" text="Wrong Username/Password entered, try again" visible="false" color="red" x="68" y="186" height="23"/>
+	<mx:TextInput x="150" y="159" displayAsPassword="true" maxChars="30" enabled="true" id="txtPassword" tabIndex="1" borderStyle="solid" cornerRadius="10"/>
+	<mx:TextInput x="150" y="129" id="txtUsername" maxChars="30" enabled="true" tabIndex="0" cornerRadius="10" borderStyle="solid"/>
+	<mx:Label x="40" y="12" text="Please Login or select guest account" id="lblTitle2" fontSize="10" fontStyle="normal"/>
+	<mx:RadioButton id="rbLogin" x="120" y="38" label="Login" groupName="radiogroup1"  selected="true"/>
+	<mx:RadioButton id="rbGuest" x="120" y="68" label="Guest" groupName="radiogroup1" selected="false"/>
+	<mx:HRule x="30" y="108" width="320"/>
+	<mx:Button x="99.75" y="201" label="Login" id="btnLogin" click="loginService.send()" tabIndex="2" width="80"/>
+	<mx:Button x="150" y="231" label="Cancel" id="btnCancel" click="cancel_Click(event)" tabIndex="3" width="80"/>
+	<mx:HTTPService id="loginService" url="php/loginValidate.php" result="onResult(event)" method="POST" showBusyCursor="true" useProxy="false">
+	<mx:request xmlns="">
+		<username>
+			{txtUsername.text}
+		</username>
+		<password>
+			{txtPassword.text}
+		</password>
+	</mx:request>
+	</mx:HTTPService>
+	<mx:Button x="200.25" y="201" label="Register" id="btnRegister" click="register_Click(event)" width="80"/>
+</mx:Panel>

@@ -1,0 +1,50 @@
+/* CSS file */
+Application {
+   
+  
+   
+   color: #333333;
+}
+
+Panel {
+   borderColor: #ffffff;
+   borderAlpha: 0.15;
+   roundedBottomCorners: true;
+   cornerRadius: 6;
+   shadowDistance: 4;
+   titleStyleName: "mypanelTitle";
+}
+
+.mypanelTitle {
+   letterSpacing: 1;
+   fontSize: 14;
+   fontWeight: bold;
+}
+
+TextInput {
+   borderStyle: solid;
+   borderColor: #666666;
+   cornerRadius: 10;
+   backgroundAlpha: 0.75;
+   backgroundColor: #666666;
+   color: #ffffff;
+   letterSpacing: 1;
+   paddingLeft: 6;
+   paddingRight: 0;
+   fontFamily: Arial;
+   fontSize: 11;
+   dropShadowEnabled: true;
+   shadowDistance: 2;
+}
+
+ProgressBar {
+   borderColor: #ffffff;
+   barColor: #3366ff;
+   trackColors: #ffffff, #e6eeee;
+   color: #ffffff;
+   paddingLeft: 30;
+   paddingRight: 30;
+   letterSpacing: 1;
+   trackHeight: 20;
+   verticalGap: 14;
+}

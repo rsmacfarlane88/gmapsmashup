@@ -1,0 +1,11 @@
+ProgressBar {
+   borderColor: #ffffff;
+   barColor: #3366ff;
+   trackColors: #ffffff, #e6eeee;
+   color: #ffffff;
+   paddingLeft: 30;
+   paddingRight: 30;
+   letterSpacing: 1;
+   trackHeight: 20;
+   verticalGap: 14;
+}/* CSS file */
