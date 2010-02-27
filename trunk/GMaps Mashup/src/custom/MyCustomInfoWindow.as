@@ -31,7 +31,7 @@ public class MyCustomInfoWindow extends UIComponent {
       heading.height = 20;
       heading.x = 5;
       heading.y = 5;
-      heading.width = 100;
+      heading.width = 280;
       heading.text = title;
       
       var desc:TextArea = new TextArea();
@@ -48,7 +48,7 @@ public class MyCustomInfoWindow extends UIComponent {
       image.width = 150;
       image.height = 120;
       image.x = 120;
-      image.y = 10;
+      image.y = 25;
       image.visible = true;
       image.source = picture;
       

@@ -12,11 +12,11 @@ $desc=$_REQUEST['description'];
 $category=$_REQUEST['category'];
 
 $insert = "INSERT INTO marker(name,lat,lon,description,category) VALUES ('$name','$lat','$lng','$desc','$category');";
-$resultID = mysql_query($insert, $linkID) or die("Data not found in 'marker' table.");
+$resultID = mysql_query($insert) or die("Data not found in 'marker' table.");
 
 
 $query = "SELECT name FROM marker ORDER BY name DESC";
-$resultID = mysql_query($query, $linkID) or die("Data not found in 'scores' table.");
+$resultID = mysql_query($query) or die("Data not found in 'scores' table.");
 
 $xml_output = "<?xml version=\"1.0\"?>\n";
 $xml_output .= "<markerTable>\n";
