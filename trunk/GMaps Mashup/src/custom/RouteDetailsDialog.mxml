@@ -11,14 +11,18 @@
 			import mx.controls.Alert;
 			
 			[Bindable]public var list:ArrayCollection;
-			public var last:ArrayCollection;
-			[Bindable]private var save:RouteMapper = new RouteMapper();
-			private var names:String;
-			private var description:String;
+			[Bindable]public var last:ArrayCollection = new ArrayCollection();
+			private var save:RouteMapper = new RouteMapper();
+			[Bindable]private var names:String;
+			[Bindable]private var description:String;
+			[Bindable]public var lastRouteID:String;
+			[Bindable]private var latlngs:Array;
+			[Bindable]private var current_latlng:String;
 			
 			private function init():void
 			{
 				routeCategoryService.send();
+				
 			}
 			
 			private function onResult(e:ResultEvent):void
@@ -29,7 +33,10 @@
 			private function lastRouteResult(e:ResultEvent):void
 			{
 				last = e.result.route.lastRoute;
-				Alert.show(""+last[0],last[0],Alert.OK);
+				var index:int = last.length;
+				
+				lastRouteID = last[index - 1].id;
+				sendRouteData();
 			}
 			
 			private function checkLastResult(e:ResultEvent):void
@@ -46,6 +53,18 @@
 				
 				
 				
+			}
+			
+			private function sendRouteData():void
+			{
+				latlngs = save.polyLatLngs;
+				
+				
+				for (var i:int=0; i < latlngs.length; i++)
+     			{
+     				current_latlng = latlngs[i];
+     				routeDataService.send();
+     			}
 			}
 			
 			private function onCancel(e:MouseEvent):void
@@ -95,6 +114,16 @@
 		<category>
 			{cbCategory.selectedIndex+1}
 		</category>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:HTTPService id="routeDataService" url="php/Route/sendRouteData.php" method="POST">
+		<mx:request xmlns="">
+		<latlng>
+			{"Test"}
+		</latlng>
+		<routeID>
+			{2}
+		</routeID>
 		</mx:request>
 	</mx:HTTPService>
 </mx:Canvas>

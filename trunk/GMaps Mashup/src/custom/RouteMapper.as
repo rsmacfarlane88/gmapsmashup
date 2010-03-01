@@ -20,7 +20,7 @@ package custom
 	public class RouteMapper extends UIComponent
 	{
 		private var testPoint:Marker;
-    	private var polyLatLngs:Array = new Array();
+    	public var polyLatLngs:Array = new Array();
     	private var polyShape;
 	
 		private var route_controller:HBox;
@@ -114,17 +114,6 @@ package custom
               	Application.application.map.addOverlay(new Marker(tmpLatLng));
           	}
        	}
-     	
-     	public function sendRouteData():void
-     	{
-     		var details:HTTPService = new HTTPService();
-     		var params:Object = new Object();
-     		
-     		details.url = "php/Route/sendRouteDetails.php";
-     		details.method = "POST";
-     		
-     		//details.send(params);
-     	}
      	
      	public function routeEnd(e:MouseEvent):void
      	{
