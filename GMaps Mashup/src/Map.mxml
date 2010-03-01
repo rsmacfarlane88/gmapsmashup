@@ -371,7 +371,7 @@
 	</mx:Script>
 	
 	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
-	<mx:HTTPService id="photoService" url="php/photoLoad.php" result="onPhotoResult(event)" />
+	<mx:HTTPService id="photoService" url="php/Flickr/photoLoad.php" result="onPhotoResult(event)" />
 	
 	
 	<custom:LoginDialogue horizontalCenter="0" verticalCenter="4" id="logindialogue1">
@@ -381,7 +381,7 @@
 		<mx:State id="loggedin" name="loggedin">
 			<mx:RemoveChild target="{logindialogue1}"/>
 			<mx:AddChild id="addChild1" position="lastChild">
-				<mx:Panel id="mapPanel" title="Campus Map" layout="absolute" right="31" bottom="26" top="101" left="285">
+				<mx:Panel id="mapPanel" title="Campus Map" layout="absolute" right="31" bottom="26" top="118" left="285">
 					<!--<maps:Map id="map" mapevent_mapready="onReady(event)"
 					key="ABQIAAAAygn08KtrPHRID57cCzRochT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQgujvgsY9T-1xHRx_tQQgNFe2vEA" left="0" top="0" bottom="0" right="0"/>-->
 					<!-- HW Key <maps:Map id="map" mapevent_mapready="onReady(event)"
@@ -396,15 +396,13 @@
 				</custom:MapFilter>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Panel layout="absolute" headerHeight="10" cornerRadius="8" roundedBottomCorners="true" left="285" top="35" height="58" right="163">
-					<mx:TextInput height="22" textIndent="2" fontSize="14" fontWeight="bold" right="10" top="6" left="99"/>
-					<mx:Label text="Search..." height="26" fontWeight="bold" fontSize="15" textAlign="center" left="0" width="91" top="6"/>
+				<mx:Panel layout="absolute" right="31" top="35" headerHeight="9" height="64" width="143">
+					<mx:Button label="Help" height="25" width="80" verticalCenter="1" horizontalCenter="0"/>
 				</mx:Panel>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Panel layout="absolute" right="31" top="35" headerHeight="9" height="58" width="124">
-					<mx:Button x="12" y="6" label="Help" height="25" width="80"/>
-				</mx:Panel>
+				<custom:MarkerSearch top="35" left="285" right="192">
+				</custom:MarkerSearch>
 			</mx:AddChild>
 		</mx:State>
 		<mx:State name="register">

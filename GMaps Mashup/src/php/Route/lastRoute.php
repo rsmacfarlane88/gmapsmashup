@@ -3,11 +3,7 @@ include("../functions.php");
 
 $connection = dbConnect();
 
-$name = $_POST['name'];
-$description = $_POST['description'];
-$category = $_POST['category'];
-
-$result = mysql_query("SELECT id FROM route");
+$result = mysql_query("SELECT id FROM route WHERE name='$name',description='$desc' AND category='$cat'");
 
 echo "<?xml version=\"1.0\" ?><route>";
 

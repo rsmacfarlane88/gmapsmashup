@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="100" title="Search">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="638" height="64"
+	creationComplete="init()" xmlns:search="custom.search.*" headerHeight="8">
 	
 	<mx:Script>
 		<![CDATA[
-		
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			import custom.search.AutoSuggest;
 			import flash.utils.setTimeout;            
             import mx.controls.Alert;
             
+            [Bindable]private var markerList:ArrayCollection;
             
-
-			private function onKeyUp(e:KeyboardEvent):void
-			{
-				
-			}
-			
-			private function onKeyDown(e:KeyboardEvent):void
-			{
-				
-			}
+            private function init():void
+            {
+            	markerSearch.send();
+            }
+            private function onResult(e:ResultEvent):void
+            {
+            	markerList = e.result.map.loc;
+            }
 			
 			
 			
 		]]>
 	</mx:Script>
 	
-	<mx:TextInput x="10" y="10" height="40" width="360" text="Search Here...." id="txtSearch" fontSize="26" fontFamily="Arial" keyDown="onKeyDown( event )"
-            keyUp="onKeyUp( event )"/>
-	<mx:DataGrid id="dgUserRequest" 
-            headerHeight="0" 
-            y="{txtsearch.y + txtSearch.height + 1}" left="10" right="10"
-            visible="false"
-            dataProvider="{ request.lastResult.keywords.search }">
-            <mx:columns>
-                <mx:DataGridColumn headerText="Keyword" dataField="searchTerm"/>
-            </mx:columns>
-        </mx:DataGrid>
+    
+    <search:AutoSuggest dataProvider="{markerList}" autoCompleteSuggest="false" labelField="name" height="26" 
+    	right="10" left="109" top="8" fontSize="16" focusRoundedCorners="true" textIndent="2" themeColor="#FFFFFF" cornerRadius="10"/>
+    <mx:HTTPService id="markerSearch" result="onResult(event)" url="php/mapLoad.php" />
+    <mx:Label text="Search..." height="26" fontWeight="bold" fontSize="15" textAlign="center" left="10" width="91" top="10"/>
 
 </mx:Panel>
