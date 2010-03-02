@@ -158,55 +158,6 @@
         		
         	}
 			
-			/* private function mapClick(e:MapMouseEvent):void {
-                     var latlngClicked:LatLng = e.latLng;
-                      polyLatLngs.push(latlngClicked);
-                     drawCoordinates();
-            }
-            
-            // Toggle from Polygon PolyLine mode
-	         private function toggleDrawMode(e:Event):void {
-	           map.clearOverlays();
-	           polyShape = null;
-	           drawCoordinates();
-	         }
-
-             private function deleteLastLatLng(e:Event):void {
-                       if (polyLatLngs.length > 0) {
-                          polyLatLngs.pop();
-                      }
-                      drawCoordinates();
-                 }
-                 
-                 // Clear current Map
-                  private function clearMap(e:Event):void {
-                    map.clearOverlays();
-                    polyShape = null;
-                    polyLatLngs.length = 0;
-                }
-
-            
-            private function drawCoordinates():void {
-                       map.clearOverlays();
-                       if (polyLatLngs.length > 1) {
-                           //Re-create Polyline/Polygon
-                            polygonMode = drawmode_polygon.selected;
-                          if (polygonMode) {
-                            polyShape = new Polygon(polyLatLngs);
-                          } else {
-                            polyShape = new Polyline(polyLatLngs);
-                          }
-                          map.addOverlay(polyShape);
-                       }
-                       
-                       if (polyLatLngs.length > 0) {
-                          // Grab last point of polyPoints to add new marker
-                          var tmpLatLng:LatLng = polyLatLngs[polyLatLngs.length -1];
-                          map.addOverlay(new Marker(tmpLatLng));
-                      }
-                   } */
-
-
 			
 			private function onPhotoResult(e:ResultEvent):void
 			{
@@ -273,6 +224,7 @@
                 	});
                 	
                 	 map.addOverlay(m);
+                	 
 			} 
 			
 			private function checkSelectedFilters(e:Event):void
