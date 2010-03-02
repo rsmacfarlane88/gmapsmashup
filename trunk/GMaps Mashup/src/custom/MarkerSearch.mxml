@@ -9,8 +9,22 @@
 			import custom.search.AutoSuggest;
 			import flash.utils.setTimeout;            
             import mx.controls.Alert;
+            import mx.core.Application;
+            //import Map;
+            
+            import com.google.maps.InfoWindowOptions;
+	    	import com.google.maps.overlays.Marker;
+	    	import com.google.maps.MapMouseEvent;
+	   
+	    	import com.google.maps.LatLng;
+	    	import com.google.maps.Map;
+	    	import com.google.maps.MapEvent;
+	    	import com.google.maps.overlays.*;
+	    	import com.google.maps.styles.*;
+         
             
             [Bindable]private var markerList:ArrayCollection;
+            //private var myMap:Map = new Map();
             
             private function init():void
             {
@@ -21,13 +35,79 @@
             	markerList = e.result.map.loc;
             }
 			
+			private function selectMarker():void
+			{
+				if(searchBox.selectedIndex != -1){
+					Application.application.map.clearOverlays();
+					drawSearchedMarker(searchBox.selectedLabel);
+				}
+			}
 			
+			public function drawSearchedMarker(name:String):void{
+				var _name:String = name;
+				var temp:String;
+				var array:ArrayCollection;
+				
+				array = Application.application.list;
+				
+				for(var i:int=0; i<array.length; i++)
+				{
+					temp = array[i].name;	
+					if(temp == _name){
+						
+						var m:Marker = new Marker(new LatLng(array[i].lat, array[i].lon),
+												new MarkerOptions({tooltip:array[i].name + "\n"+array[i].description,
+													strokeStyle: new StrokeStyle({color: 0xffffff}),
+                  									fillStyle: new FillStyle({color: 0x0099ff, alpha: 0.8}),
+                  									radius: 8,
+                  									hasShadow: true,
+                  									icon:Application.application.icons.chooseIcon(array[i].category),
+													iconOffset:new Point(-15, -15) 
+													}));
+						
+						var index:int = i;
+						var source:String;
+						
+						
+						for(var j:int=0; j<Application.application.photoList.length; j++)
+						{
+							if (Application.application.photoList[j].markerID == array[index].id)
+							{
+								source = Application.application.photoList[j].url;
+							}
+						}
+													
+						var options:InfoWindowOptions = new InfoWindowOptions({
+													
+													//contentHTML:html,
+													customContent: new MyCustomInfoWindow(array[i].name,source,array[i].description),
+													cornerRadius: 20,
+                									width: 320,
+                									height: 220,
+                									drawDefaultFrame: true });
+					
+					
+					
+					createMarker(m,options, array, i);
+					}
+				}
+			}
+			
+			private function createMarker(m:Marker, o:InfoWindowOptions, array:ArrayCollection, index:int):void
+			{
+				m.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
+                		m.openInfoWindow(o);
+                	});
+                	
+                	 Application.application.map.addOverlay(m);
+                	 m.openInfoWindow(o);
+			} 
 			
 		]]>
 	</mx:Script>
 	
     
-    <search:AutoSuggest dataProvider="{markerList}" autoCompleteSuggest="false" labelField="name" height="26" 
+    <search:AutoSuggest id="searchBox" change="selectMarker()" dataProvider="{markerList}" autoCompleteSuggest="false" labelField="name" height="26" 
     	right="10" left="109" top="8" fontSize="16" focusRoundedCorners="true" textIndent="2" themeColor="#FFFFFF" cornerRadius="10"/>
     <mx:HTTPService id="markerSearch" result="onResult(event)" url="php/mapLoad.php" />
     <mx:Label text="Search..." height="26" fontWeight="bold" fontSize="15" textAlign="center" left="10" width="91" top="10"/>
