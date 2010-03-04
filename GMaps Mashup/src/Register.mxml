@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="246" title="Register">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="246" title="Register" creationComplete="init()">
 	
 	<mx:Script>
 		<![CDATA[
@@ -10,10 +10,11 @@
 			import mx.core.Application;
 			
 			private var gen:PasswordGenerator = new PasswordGenerator();
+			[Bindable]private var userList:ArrayCollection;
 			[Bindable]private var password:String
-			[Bindable]private var username_Exists:Boolean = false;
-			[Bindable]private var password_Exists:Boolean = false;
-			[Bindable]private var email_Exists:Boolean = false;
+			[Bindable]private var username_Exists:int = 0;
+			[Bindable]private var password_Exists:int = 0;
+			[Bindable]private var email_Exists:int = 0;
 			private var results_List:ArrayCollection;
 			
 			public function onContinueClick(e:MouseEvent):void{
@@ -25,54 +26,62 @@
 				this.currentState = "";
 			}
 			
-			private function check_Results(e:ResultEvent):void
+			private function init():void
 			{
-				 
-				Alert.show(results_List[0].username,"test",Alert.OK);
-				
-				if(e.result.CheckData.Data.password == "yes")
-				{
-					password_Exists = true;
-				}
-				if(e.result.CheckData.Data.username == "yes")
-				{
-					username_Exists = true;
-				}
-				if(e.result.CheckData.Data.email == "yes")
-				{
-					email_Exists = true;
-				}
-				
-				
+				checkService.send();
 			}
+			
+			private function check_Valid(e:ResultEvent):void
+			{
+				userList = e.result.userList.user;
+			}
+			
 			
 			public function submit_Click(e:MouseEvent):void
 			{
-				var errorMessage:String;
+				
 				password = gen.generatePassword(8);
+				var usernameMessage:String = "Username already exists\n";
+				var emailMessage:String = "Email already exists\n";
+				var errorMessage:String = "";
+				username_Exists = 0;
+				email_Exists = 0;
 				
 				if(txtUsername.text != "" && txtEmail.text != "")
 				{
-					checkService.send();
-					
-					if(username_Exists == true || password_Exists == true || email_Exists == true)
+					for(var i:int=0; i<userList.length; i++)
 					{
-						if(password_Exists == true){
-							password = gen.generatePassword(8);		
+						if(txtUsername.text == userList[i].username)
+						{
+							username_Exists = 1;
 						}
-						if(email_Exists == true){
-							errorMessage += "Email address exists already\n";	
-						} 
-						if(username_Exists == true){
-							errorMessage += "Username exists already\n";
+						if((txtEmail.text + "@hw.ac.uk") == userList[i].email)
+						{
+							email_Exists = 1;
 						}
 						
-						Alert.show("Warning",errorMessage,Alert.OK);
 						
-					
-					}else{
-						sendDetails();
 					}
+					
+					if (username_Exists == 1 || email_Exists == 1)
+					{
+						if(username_Exists == 1){
+							errorMessage += usernameMessage;
+						}
+						if(username_Exists == 1){
+							errorMessage += emailMessage;
+						}
+						Alert.show(errorMessage, "Error Registering", Alert.OK);
+					}
+					
+					if (username_Exists == 0 && email_Exists == 0)
+					{
+						sendDetails();
+						mailService.send();
+					}
+					
+					
+					
 					
 					
 				}else{
@@ -85,14 +94,13 @@
 			
 			public function sendDetails():void
 			{
-				if(username_Exists == false && password_Exists == false && email_Exists == false){
 					registerService.send();
-					mailService.send();
+					
 					this.txtUsername.text = "";
 					this.txtEmail.text = "";
 					Application.application.currentState = "";
 					this.currentState = "";
-				}
+				
 				
 			}
 			
@@ -178,17 +186,7 @@
 	</mx:request>
 	</mx:HTTPService>
 	
-	<mx:HTTPService id="checkService" method="POST" url="php/Register/checkPassword.php" result="check_Results(event)">
-		<mx:request xmlns="">
-		<username>
-			{txtUsername.text}
-		</username>
-		<password>
-			{password}
-		</password>
-		<email>
-			{txtEmail.text + "@hw.ac.uk"}
-		</email>
-	</mx:request>
-	</mx:HTTPService>
+	<mx:HTTPService id="checkService" url="php/Register/checkPassword.php" result="check_Valid(event)"/>
+		
+	
 </mx:Panel>
