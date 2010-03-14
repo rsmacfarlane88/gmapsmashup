@@ -1,5 +1,7 @@
 package custom
 {
+import flash.events.MouseEvent;
+import mx.core.Application;
 import mx.containers.Canvas;
 import mx.controls.Image;
 import mx.controls.Label;
@@ -11,6 +13,7 @@ import mx.core.UIComponent;
 public class MyCustomInfoWindow extends UIComponent {
               
   //public var canvas:Canvas = new Canvas();
+  public var link2:LinkButton;
   
   public function MyCustomInfoWindow(title:String, picture:String, description:String) {
     // Add body text
@@ -59,15 +62,29 @@ public class MyCustomInfoWindow extends UIComponent {
       link1.y = 170;
       link1.label = "Directions";
       
+      link2 = new LinkButton();
+      link2.width = 80;
+      link2.height = 15;
+      link2.x = 90;
+      link2.y = 170;
+      link2.addEventListener(MouseEvent.CLICK, showPage);
+      link2.label = "Timetable";
+      link2.visible = false;
+      
       can.addChild(heading);
       can.addChild(image);
       can.addChild(desc);
       can.addChild(link1);
-      
+      can.addChild(link2);
       
       return can;
   }
   
+  private function showPage(e:MouseEvent):void
+  {
+  	var page:TimetableViewer = new TimetableViewer();
+  	Application.application.addChild(page);
+  }
 
 }
 

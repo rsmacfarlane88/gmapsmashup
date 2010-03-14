@@ -7,7 +7,6 @@
 		import mx.core.Application;
 		
 		public function init():void{
-			//pic.source = 'http://static.flickr.com/' + data.server + '/' + data.id + '_' + data.secret + '_m.jpg';
 			pic.source = 'http://static.flickr.com/' + data.server + '/' + data.id + '_' + data.secret + '_m.jpg';
 			//trace("source : "+pic.source)
 			pic.height = 80;

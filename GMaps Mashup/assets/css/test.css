@@ -48,3 +48,24 @@ ProgressBar {
    trackHeight: 20;
    verticalGap: 14;
 }
+
+ComboBox {
+   cornerRadius: 10;
+   color: #0b333c;
+   borderColor: #b7babc;
+   iconColor: #111111;
+   highlightAlphas: 1, 0.16;
+   fillColors: #666666, #999999, #333333, #999999;
+   arrowButtonWidth: 0;
+   backgroundAlpha: 1;
+   selectionColor: #999999;
+   textSelectedColor: #0b333c;
+   useRollOver: true;
+   rollOverColor: #aadeff;
+   textRollOverColor: #0b333c;
+   themeColor: #009dff;
+   alternatingItemColors: #ffffff, #ffffff;
+   openDuration: 589;
+   closeDuration: 584;
+   textAlign: left;
+}
