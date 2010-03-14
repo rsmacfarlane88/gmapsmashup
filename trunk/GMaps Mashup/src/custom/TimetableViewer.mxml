@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="600" height="450" 
+	xmlns:custom="custom.*" xmlns:code="http://code.google.com/p/flex-iframe/"
+	 initialize="init()">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			//[Bindable]public var url:String = "http://lothianbuses.com/r45.php";
+			
+			private function init():void
+			{
+				
+				this.height = Application.application.mapPanel.height *0.8;
+				this.width = Application.application.mapPanel.width * 0.8;
+				var x2:int = (Application.application.mapPanel.width - this.width) / 2;
+				var y2:int = (Application.application.mapPanel.height - this.height)/2;
+				this.x = Application.application.mapPanel.x + x2 ;
+				this.y = Application.application.mapPanel.y +y2 ;
+				
+			}
+		]]>
+	</mx:Script>
+	<code:IFrame id="iframe" source="http://lothianbuses.com/r45.php" width="100%" height="100%">
+	</code:IFrame>
+	<mx:ControlBar>
+	<mx:Button id="btnClose" click="Application.application.removeChild(this)" label="Close Window"/>
+	</mx:ControlBar>
+</mx:Panel>

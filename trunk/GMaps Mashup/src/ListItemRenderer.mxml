@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+  xmlns:mx="http://www.adobe.com/2006/mxml"
+  verticalGap="0"
+  horizontalScrollPolicy="off"
+  verticalScrollPolicy="off">
+  
+  <mx:Script>
+    <![CDATA[
+      import flash.utils.setTimeout;
+      import mx.controls.List;
+      
+      [Bindable]
+      private var list : List;
+      
+      override public function set data(value:Object):void
+      {
+         super.data = value;
+         list = owner as List;
+       }
+    ]]>
+  </mx:Script>
+  
+  
+  <mx:Label 
+    width="100%"
+    fontWeight="bold"
+    fontSize="10"
+    text="{ data.title }"
+    selectable="false"  />
+  
+ <!-- <mx:Label 
+    width="100%"
+    text="subject: { data.subject }"
+    fontSize="9"
+    selectable="false"  />    
+    
+  <mx:Label 
+    width="100%"
+    text="author: { data.creator }"
+    fontSize="9"
+    selectable="false"  />-->
+    
+  <mx:Text 
+    color="#333333"
+    id="description"
+    htmlText="{ data.description }" 
+    width="{ width }"
+    visible="{ list.selectedItem == data }"
+    includeInLayout="{ list.selectedItem == data }"
+    selectable="false"  />
+    
+</mx:VBox>

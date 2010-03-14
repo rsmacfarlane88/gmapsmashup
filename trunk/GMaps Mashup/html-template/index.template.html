@@ -40,6 +40,7 @@ var requiredMinorVersion = ${version_minor};
 var requiredRevision = ${version_revision};
 // -----------------------------------------------------------------------------
 // -->
+
 </script>
 </head>
 
@@ -89,6 +90,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"allowScriptAccess","sameDomain",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
+			
 	);
   } else {  // flash is too old or we can't detect the plugin
     var alternateContent = 'Alternate HTML content should be placed here. '
@@ -113,9 +115,11 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 				quality="high"
 				allowScriptAccess="sameDomain"
 				type="application/x-shockwave-flash"
+				wmode="opaque"
 				pluginspage="http://www.adobe.com/go/getflashplayer">
 			</embed>
 	</object>
 </noscript>
+
 </body>
 </html>

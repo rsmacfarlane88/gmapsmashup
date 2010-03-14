@@ -56,11 +56,12 @@ package custom.search
 		{
 			super();
 			//make it behave as close as to a textInput as possible
-			setStyle("cornerRadius",12);
+			setStyle("cornerRadius",0);
 			setStyle("arrowButtonWidth",0);
 			setStyle("fontWeight","normal");
 			setStyle("paddingRight",3);
 			setStyle("paddingLeft",0);
+			
 			//make it editable
 			editable=true;
 			//we are going to be using the prompt as the input

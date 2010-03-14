@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties mainApplicationPath="mapsTester.mxml" version="3">
+<actionScriptProperties mainApplicationPath="Map.mxml" version="3">
 <compiler additionalCompilerArguments="-locale en_US" copyDependentFiles="true" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="9.0.124" htmlPlayerVersionCheck="true" outputFolderLocation="C:/wamp/www/mapsTester-debug" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath/>
 <libraryPath defaultLinkType="1">
@@ -9,6 +9,7 @@
 <libraryPathEntry kind="3" linkType="1" path="C:/Users/Rosco/Documents/Flex Builder 3/AS3CoreLib/as3corelib-.92.1/lib/as3corelib.swc" useDefaultLinkType="false"/>
 <libraryPathEntry kind="3" linkType="1" path="C:/Users/Rosco/Documents/Flex Builder 3/Flickr API/bin/flickr.swc" useDefaultLinkType="false"/>
 <libraryPathEntry kind="3" linkType="1" path="C:/Users/Rosco/Documents/Flex Builder 3/AS3Crypto/as3crypto.swc" useDefaultLinkType="false"/>
+<libraryPathEntry kind="3" linkType="1" path="C:/Users/Rosco/Documents/Flex Builder 3/iframe api/flexiframe.swc" useDefaultLinkType="false"/>
 </libraryPath>
 <sourceAttachmentPath/>
 </compiler>

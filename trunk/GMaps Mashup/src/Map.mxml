@@ -12,7 +12,6 @@
 			import mx.controls.Image;
 			import mx.events.StateChangeEvent;
 			import mx.controls.Text;
-			import custom.MyCustomInfoWindow2;
 			import custom.MyCustomInfoWindow;
 			import com.google.maps.InfoWindowOptions;
 	    	import com.google.maps.overlays.Marker;
@@ -36,26 +35,6 @@
 	      	import mx.collections.ArrayCollection;
 	      	import mx.core.Application;
 	      	import custom.MarkerOperations;
-	      	
-    		
-			[Embed(source="../images/food.png")]
-			public var pic:Class;
-			/*[Embed(source="../images/glass_numbers_2.png")]
-			public var icon2:Class;
-			[Embed(source="../images/shop.png")]
-			public var icon3:Class;
-			[Embed(source="../images/food.png")]
-			public var icon4:Class;
-			[Embed(source="../images/entertain.png")]
-			public var icon5:Class;
-			[Embed(source="../images/bank.png")]
-			public var icon6:Class;
-			[Embed(source="../images/computer.png")]
-			public var icon7:Class;
-			[Embed(source="../images/bus.png")]
-			public var icon8:Class;
-			[Embed(source="../images/park_icon.png")]
-			public var icon9:Class; */
 			
 			public var icons:CustomIcons = new CustomIcons;
 			public var marker:Marker;
@@ -63,14 +42,9 @@
 			public var photoList:ArrayCollection;
 			public var route:RouteMapper;
 			private var markerOps:MarkerOperations;
-			
-            
 
-			
 			private function init():void{
-				mInfo.visible=false;
-				//customUI.visible = false;
-				//login.visible = false;
+				//Security.allowDomain("http://rsmacfarlane.com");
 			}
 			
 			private function setFilterEvents():void{
@@ -149,7 +123,7 @@
         		
         		Alert.show("You are about to add a route to the map.\n" + 
         				"Start by clicking each point on the map.\n" + 
-        				"End by hitting space bar.",
+        				"End by hitting the end route button.",
         				"Route Instructions", Alert.OK);
         				
         		//this.addEventListener(KeyboardEvent.KEY_DOWN, route.saveRoute);
@@ -183,27 +157,31 @@
 													}));
 					
 					
-					
-					
-					var html:String = "<p><b>    "+list[i].name+"</b></p><p>" + 
-							"<img src='http://farm3.static.flickr.com/2779/4328471540_c52af27405_b.jpg' width='150' height='110' align='left' hspace='0' vspace='10'><br>"
-							+list[i].description+"</p>";
-					//http://www.flickr.com/photos/46753641@N02/4328471540/
 					var index:int = i;
 					var source:String;
 					for(var j:int=0; j<photoList.length; j++)
 					{
 						if (photoList[j].markerID == list[index].id)
 						{
-							source = photoList[j].url;
+							//source = photoList[j].url;
+							//source = "http://rsmacfarlane.com/Project/Uploads/Koala.jpg";
 						}
 					}
 					
+					source = "http://www.rsmacfarlane.com/Project/Uploads/avatar-body.png";
+					
+					var test:MyCustomInfoWindow = new MyCustomInfoWindow(list[i].name,source,list[i].description);
+					
+					if(list[i].category == 8){
+						test.link2.visible = true;
+					}else{
+						test.link2.visible = false;
+					}
 					
 					var options:InfoWindowOptions = new InfoWindowOptions({
 													
 													//contentHTML:html,
-													customContent: new MyCustomInfoWindow(list[i].name,source,list[i].description),
+													customContent: test,
 													cornerRadius: 20,
                 									width: 320,
                 									height: 220,
@@ -295,7 +273,7 @@
 													iconOffset:new Point(-15, -15) 
 													}));
 					
-						var index = i;
+						var index:int = i;
 					var source:String;
 					for(var j:int=0; j<photoList.length; j++)
 					{
@@ -317,14 +295,12 @@
 					}
  				}
 			}
-			
-			
+		
 		]]>
 	</mx:Script>
 	
 	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
 	<mx:HTTPService id="photoService" url="php/Flickr/photoLoad.php" result="onPhotoResult(event)" />
-	
 	
 	<custom:LoginDialogue horizontalCenter="0" verticalCenter="4" id="logindialogue1">
 	</custom:LoginDialogue>
@@ -336,7 +312,8 @@
 				<mx:Panel id="mapPanel" title="Campus Map" layout="absolute" right="31" bottom="26" top="118" left="285">
 					<!--<maps:Map id="map" mapevent_mapready="onReady(event)"
 					key="ABQIAAAAygn08KtrPHRID57cCzRochT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQgujvgsY9T-1xHRx_tQQgNFe2vEA" left="0" top="0" bottom="0" right="0"/>-->
-					<!-- HW Key <maps:Map id="map" mapevent_mapready="onReady(event)"
+					 <!--HW Key below--> 
+					 <!--<maps:Map id="map" mapevent_mapready="onReady(event)"
 					key="ABQIAAAAMeHAUcDLD4VmHkcsoSxH7BTW3dTYpunvZ9O_C1Wlk1wzOXD1_xS9PEov6ILo2cQ-l5623GjC7veBgQ" left="0" top="0" bottom="0" right="0"/>-->
 					<maps:Map id="map" mapevent_mapready="onReady(event)" 
 					key="ABQIAAAAMeHAUcDLD4VmHkcsoSxH7BRsOTIY7FFhIYUrWDWOjhrIyIvjuBT8y5lNdU2K4WmNzOZFI9L7yVdqeQ" left="0" top="0" bottom="0" right="0"/>
