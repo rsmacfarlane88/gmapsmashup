@@ -42,8 +42,12 @@
 			public var photoList:ArrayCollection;
 			public var route:RouteMapper;
 			private var markerOps:MarkerOperations;
+			public var test:MyCustomInfoWindow; 
+			[Bindable]public var busNo:String = "";
+			[Bindable]public var acRSS:ArrayCollection;
 
 			private function init():void{
+				rss.send();
 				//Security.allowDomain("http://rsmacfarlane.com");
 			}
 			
@@ -168,19 +172,22 @@
 						}
 					}
 					
-					source = "http://www.rsmacfarlane.com/Project/Uploads/avatar-body.png";
+					source = "http://www.rsmacfarlane.com/Project/Uploads/Koala.jpg";
 					
-					var test:MyCustomInfoWindow = new MyCustomInfoWindow(list[i].name,source,list[i].description);
+					
+					test = new MyCustomInfoWindow(list[i].name,source,list[i].description);
 					
 					if(list[i].category == 8){
+						
+						test.fetchRouteNo(list[i].id);
 						test.link2.visible = true;
+						test.routeList.visible = true;
 					}else{
 						test.link2.visible = false;
+						test.routeList.visible = false;
 					}
 					
 					var options:InfoWindowOptions = new InfoWindowOptions({
-													
-													//contentHTML:html,
 													customContent: test,
 													cornerRadius: 20,
                 									width: 320,
@@ -296,12 +303,16 @@
  				}
 			}
 		
+			private function onRSSResult(e:ResultEvent):void
+			{
+				acRSS = e.result.rss.channel.item;
+			}
 		]]>
 	</mx:Script>
 	
 	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
 	<mx:HTTPService id="photoService" url="php/Flickr/photoLoad.php" result="onPhotoResult(event)" />
-	
+	<mx:HTTPService id="rss" result="onRSSResult" url="http://www.news.hw.ac.uk/hw-news.xml" resultFormat="e4x" />
 	<custom:LoginDialogue horizontalCenter="0" verticalCenter="4" id="logindialogue1">
 	</custom:LoginDialogue>
 	
@@ -361,9 +372,9 @@
         </mx:Transition>
 
 	</mx:transitions>
+	 
 	
-	
-
+ 
 <!--	<mx:HBox id="route_controller">  
    <mx:RadioButton
        id="drawmode_polygon"
