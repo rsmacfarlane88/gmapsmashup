@@ -21,7 +21,7 @@
 			private var imageTypes:FileFilter = new FileFilter("Image:*.jpg;*.jpeg;*.gif;*.png","*.jpg;*.jpeg;*.gif;*.png");
 			private var serverSideScript:String = "php/media/uploadFile.php";
 			private var _numCurrentUpload:Number = 0;
-			
+			private var myVar:String;
 			private var uploadedImageURL:String;
 			
 			
@@ -69,7 +69,8 @@
 										+"&lat="+markerLatLng.lat()
 										+"&lng="+markerLatLng.lng()
 										+"&description="+txtDescription.text
-										+"&category="+category;
+										+"&category="+category
+										+"&image_url="+uploadedImageURL;
 					addMarkerService.send();
 					
 					txtName.text = "";
@@ -105,10 +106,13 @@
 				// get the first file that the user chose
 				fileReference = FileReference(fileList[0]);
 				
+				
 				// upload the file to the server side script
 				fileReference.addEventListener(Event.COMPLETE, uploadCompleteHandler);
 				fileReference.addEventListener(ProgressEvent.PROGRESS, onUploadProgress);
-				fileReference.upload(urlRequest);
+				//fileReference.upload(urlRequest+"?myVar='Rosco'");
+				myVar = "Rosco";
+				fileReference.upload(new URLRequest("php/media/uploadFile.php?myVar="+myVar));
 				
 				// update the status text
 				statusText.text = "Uploading...";
@@ -117,8 +121,8 @@
 			
 			private function uploadCompleteHandler(event:Event):void {
 				statusText.text = "Image Uploaded: " + event.target.name;
-				imageURL="media/"+event.target.name
-				uploadedImageURL = imageURL;
+				imageURL="media/"+myVar+event.target.name;
+				uploadedImageURL = "media/"+event.target.name;
 				setImage();
 			}
 			
