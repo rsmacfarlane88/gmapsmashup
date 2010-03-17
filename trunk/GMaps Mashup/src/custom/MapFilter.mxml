@@ -39,7 +39,7 @@
 
 			private function init():void
 			{
-				//serviceRSS.send();
+				Application.application.rss.send();
 				getImages();
 				
 			}
@@ -130,6 +130,12 @@
 			<mx:Image id="imgEntertainment" x="10" y="160" width="24" height="24" source="{icons.entertainment}"/>
 			<mx:Image id="imgBank" x="10" y="190" width="24" height="24" source="{icons.bank}"/>
 			<mx:Image id="imgParking" x="10" y="220" width="20" height="20" source="{icons.parking}"/>
+		</mx:Canvas>
+		<mx:Canvas label="Latest News" width="100%" height="100%">
+			<mx:List
+			id="list"
+    variableRowHeight="true"
+    itemRenderer="ListItemRenderer" dataProvider="{Application.application.acRSS}" alternatingItemColors="[#BCCAFF, #FFFFFF]" left="10" right="10" top="36" bottom="16"></mx:List>
 		</mx:Canvas>
 		<mx:HDividedBox label="Video" width="100%" height="100%">
 		</mx:HDividedBox>
