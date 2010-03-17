@@ -37,16 +37,18 @@ TextInput {
    shadowDistance: 2;
 }
 
+
 ProgressBar {
-   borderColor: #ffffff;
-   barColor: #3366ff;
-   trackColors: #ffffff, #e6eeee;
-   color: #ffffff;
+   borderColor: #2b333c;
+   barColor: #009dff;
+   trackColors: #666666, #ffffff;
+   color: #333333;
    paddingLeft: 30;
    paddingRight: 30;
+   textIndent: 0;
    letterSpacing: 1;
-   trackHeight: 20;
-   verticalGap: 14;
+   trackHeight: 10;
+   verticalGap: 5;
 }
 
 ComboBox {

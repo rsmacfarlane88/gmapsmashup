@@ -14,8 +14,20 @@
 			import mx.core.Application;
 			import mx.controls.Alert;
 			
-			private const _strDomain:String = new String("http://www.rsmacfarlane.com");
-			private const _strUploadScript:String = new String(_strDomain + "/Project/custom/upload/upload.php");
+			private var imageURL:String="null";
+			private var user_image_dir:String="";
+			private var urlRequest:URLRequest;
+			private var fileReferenceList:FileReferenceList;
+			private var imageTypes:FileFilter = new FileFilter("Image:*.jpg;*.jpeg;*.gif;*.png","*.jpg;*.jpeg;*.gif;*.png");
+			private var serverSideScript:String = "php/media/uploadFile.php";
+			private var _numCurrentUpload:Number = 0;
+			
+			private var uploadedImageURL:String;
+			
+			
+			//private const _strDomain:String = new String("http://www.rsmacfarlane.com");
+			//private const _strUploadScript:String = new String(_strDomain + "/Project/custom/upload/upload.php");
+		
 		
 			private var markerName:String;
 			public var markerLatLng:LatLng;
@@ -23,8 +35,12 @@
 			
 			private function init():void
 			{
-				Security.allowDomain(_strDomain)
 				categoryProvider.send();
+				
+				urlRequest = new URLRequest(serverSideScript);
+				fileReferenceList = new FileReferenceList();
+				fileReferenceList.addEventListener(Event.SELECT, fileSelectedHandler);
+
 			}
 			
 			private function onResult(e:ResultEvent):void
@@ -74,11 +90,64 @@
 				
 			}
 			
-			private function openFileUpload(e:MouseEvent):void
-			{
-				this.currentState = "upload";
-				this.width = 500;
-				this.height = 250;
+			private function uploadFile():void {
+				
+				fileReferenceList.browse([imageTypes]);
+				
+			}
+			
+			private function fileSelectedHandler(event:Event):void {
+				Alert.show("File Uploading...");
+				var fileReference:FileReference;
+				var fileReferenceList:FileReferenceList = FileReferenceList(event.target);
+				var fileList:Array = fileReferenceList.fileList;
+
+				// get the first file that the user chose
+				fileReference = FileReference(fileList[0]);
+				
+				// upload the file to the server side script
+				fileReference.addEventListener(Event.COMPLETE, uploadCompleteHandler);
+				fileReference.addEventListener(ProgressEvent.PROGRESS, onUploadProgress);
+				fileReference.upload(urlRequest);
+				
+				// update the status text
+				statusText.text = "Uploading...";
+				updateProgBar();
+			}
+			
+			private function uploadCompleteHandler(event:Event):void {
+				statusText.text = "Image Uploaded: " + event.target.name;
+				imageURL="media/"+event.target.name
+				uploadedImageURL = imageURL;
+				setImage();
+			}
+			
+			private function setImage():void{
+			//image.source=imageURL;
+			Alert.show(imageURL,"UPLOAD COMPLETE");
+			}
+			
+			public function return_imageURL():String{
+				return imageURL;
+			}
+			
+			// Get upload progress
+			private function onUploadProgress(event:ProgressEvent):void {
+				var numPerc:Number = Math.round((event.bytesLoaded / event.bytesTotal) * 100);
+				updateProgBar(numPerc);
+				var evt:ProgressEvent = new ProgressEvent("uploadProgress", false, false, event.bytesLoaded, event.bytesTotal);
+				dispatchEvent(evt);
+			}
+			
+			// Update progBar
+			private function updateProgBar(numPerc:Number = 0):void {
+				var strLabel:String = (_numCurrentUpload + 1) + "/" + fileReferenceList.fileList.length;
+				strLabel = (_numCurrentUpload + 1 <= fileReferenceList.fileList.length && numPerc > 0 && numPerc < 100) ? numPerc + "% - " + strLabel : strLabel;
+				strLabel = (_numCurrentUpload + 1 == fileReferenceList.fileList.length && numPerc == 100) ? "Upload Complete - " + strLabel : strLabel;
+				strLabel = (fileReferenceList.fileList.length == 0) ? "" : strLabel;
+				progBar.label = strLabel;
+				progBar.setProgress(numPerc, 100);
+				progBar.validateNow();
 			}
 			
 		]]>
@@ -98,12 +167,12 @@
 			<mx:RemoveChild target="{lblName}"/>
 			<mx:RemoveChild target="{lblTitle}"/>
 			<mx:AddChild position="lastChild">
-				<file:FileUpload
+				<!--<file:FileUpload
 			width="100%" height="100%" id="fileUpload"
 			uploadUrl="{_strUploadScript}"
 			uploadComplete="Alert.show('File(s) have been uploaded.', 'Upload successful')" 
 			uploadIOError="Alert.show('IO Error in uploading file.', 'Error')" 
-			uploadSecurityError="Alert.show('Security Error in uploading file.', 'Error')"/>
+			uploadSecurityError="Alert.show('Security Error in uploading file.', 'Error')"/>-->
 			</mx:AddChild>
 		</mx:State>
 	</mx:states>
@@ -121,7 +190,9 @@
 	<mx:ComboBox id="cbCategory" x="104" y="116" width="180" dataProvider="{list}" selectedIndex="0" labelField="cat" cornerRadius="10"/>
 	<mx:Label x="10" y="161" visible="false" color="red" text="Please enter all details for the marker" width="274" textAlign="center" id="msgInvalid"/>
 	<mx:Label x="13" y="146" text="Upload Image" id="lblImage" textAlign="right" fontFamily="Arial" fontSize="12"/>
-	<mx:Button x="104" y="146" label="Browse" id="btnBrowse" click="openFileUpload(event)"/>
+	<mx:Button x="104" y="146" label="Browse" id="btnBrowse" click="uploadFile()"/>
+	<mx:Label x="180" y="148" width="104" id="statusText"/>
+	<mx:ProgressBar x="104" y="174" id="progBar" mode="manual" label="" labelPlacement="center" width="180" paddingLeft="0" paddingRight="0"/>
 	
 	
 
