@@ -15,7 +15,8 @@ while($row = mysql_fetch_assoc($result))
 	echo "<lon>" . $row["lon"] . "</lon>";
 	echo "<lat>" . $row["lat"] . "</lat>";
 	echo "<description>" . $row["description"] . "</description>";
-	echo "<category>" . $row["category"] . "</category></loc>";
+	echo "<category>" . $row["category"] . "</category>";
+	echo "<image_url>" . $row['image_url'] . "</image_url></loc>";
 }
 
 echo "</map>";

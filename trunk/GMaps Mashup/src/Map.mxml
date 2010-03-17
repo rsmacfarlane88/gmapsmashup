@@ -172,7 +172,8 @@
 						}
 					}
 					
-					source = "http://www.rsmacfarlane.com/Project/Uploads/Koala.jpg";
+					//source = "http://www.rsmacfarlane.com/Project/Uploads/Koala.jpg";
+					source = "php/"+list[i].image_url;
 					
 					
 					test = new MyCustomInfoWindow(list[i].name,source,list[i].description);

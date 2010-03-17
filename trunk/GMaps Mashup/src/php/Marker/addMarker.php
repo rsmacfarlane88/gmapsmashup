@@ -10,8 +10,9 @@ $lat=$_REQUEST['lat'];
 $lng=$_REQUEST['lng'];
 $desc=$_REQUEST['description'];
 $category=$_REQUEST['category'];
+$image_url= $_REQUEST['image_url'];
 
-$insert = "INSERT INTO marker(name,lat,lon,description,category) VALUES ('$name','$lat','$lng','$desc','$category');";
+$insert = "INSERT INTO marker(name,lat,lon,description,category, image_url) VALUES ('$name','$lat','$lng','$desc','$category','$image_url');";
 $resultID = mysql_query($insert) or die("Data not found in 'marker' table.");
 
 
@@ -28,6 +29,7 @@ while ($row = mysql_fetch_assoc($resultID)) {
 	$xml_output .= "\t\t<lng>" . $row['lng'] . "</lng>\n";
 	$xml_output .= "\t\t<description>" . $row['description'] . "</description>\n";
 	$xml_output .= "\t\t<category>" . $row['category'] . "</category>\n";
+	$xml_output .= "\t\t<image_url>" . $row['image_url'] . "</image_url>\n";
     $xml_output .= "\t</marker>\n";
 }
 
