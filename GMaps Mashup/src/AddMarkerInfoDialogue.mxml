@@ -111,7 +111,9 @@
 				fileReference.addEventListener(Event.COMPLETE, uploadCompleteHandler);
 				fileReference.addEventListener(ProgressEvent.PROGRESS, onUploadProgress);
 				//fileReference.upload(urlRequest+"?myVar='Rosco'");
-				myVar = "Rosco";
+				
+				var currentDate:Date = new Date();
+				myVar = dateFormatter.format(currentDate);
 				fileReference.upload(new URLRequest("php/media/uploadFile.php?myVar="+myVar));
 				
 				// update the status text
@@ -122,7 +124,7 @@
 			private function uploadCompleteHandler(event:Event):void {
 				statusText.text = "Image Uploaded: " + event.target.name;
 				imageURL="media/"+myVar+event.target.name;
-				uploadedImageURL = "media/"+event.target.name;
+				uploadedImageURL = imageURL;
 				setImage();
 			}
 			
@@ -197,6 +199,7 @@
 	<mx:Button x="104" y="146" label="Browse" id="btnBrowse" click="uploadFile()"/>
 	<mx:Label x="180" y="148" width="104" id="statusText"/>
 	<mx:ProgressBar x="104" y="174" id="progBar" mode="manual" label="" labelPlacement="center" width="180" paddingLeft="0" paddingRight="0"/>
+	<mx:DateFormatter id="dateFormatter" formatString="DDMMMYYYY-HNNSS-"/> 
 	
 	
 
