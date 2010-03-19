@@ -110,8 +110,11 @@
 
 		]]>
 	</mx:Script>
-	
-	<mx:Accordion top="0" left="0" right="0" bottom="0">
+	<mx:Component id="HTMLRenderer">
+        <mx:Text width="100%"  htmlText="{listData.label}" selectable="false"/>
+ 	</mx:Component>
+
+	<mx:Accordion id="sidebar" top="0" left="0" right="0" bottom="0">
 	
 		<mx:Canvas label="Map Filter" width="100%" height="100%">
 			<mx:CheckBox x="42" y="40" label="Department Buildings" id="checkBuildings"  enabled="false"/>
@@ -130,6 +133,16 @@
 			<mx:Image id="imgEntertainment" x="10" y="160" width="24" height="24" source="{icons.entertainment}"/>
 			<mx:Image id="imgBank" x="10" y="190" width="24" height="24" source="{icons.bank}"/>
 			<mx:Image id="imgParking" x="10" y="220" width="20" height="20" source="{icons.parking}"/>
+		</mx:Canvas>
+		<mx:Canvas  label="Directions" width="100%" height="100%">
+			<mx:DataGrid id="directionsGrid" width="100%" height="100%" sortableColumns="false" variableRowHeight="true">
+				<mx:columns>
+      				<mx:Array>
+       					<mx:DataGridColumn wordWrap="true" headerText="Description" dataField="descriptionHtml" itemRenderer="{HTMLRenderer}"/>
+       					<mx:DataGridColumn headerText="Distance" dataField="distanceHtml" width="70" itemRenderer="{HTMLRenderer}"/>
+      				</mx:Array>
+     			</mx:columns>
+			</mx:DataGrid>
 		</mx:Canvas>
 		<mx:Canvas label="Latest News" width="100%" height="100%">
 			<mx:List

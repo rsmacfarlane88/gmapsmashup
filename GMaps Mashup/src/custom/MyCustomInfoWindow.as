@@ -1,9 +1,14 @@
 package custom
 {
+import com.google.maps.InfoWindowOptions;
+import com.google.maps.LatLng;
 import com.google.maps.LatLngBounds;
 import com.google.maps.interfaces.IPolyline;
+import com.google.maps.overlays.Marker;
 import com.google.maps.services.Directions;
 import com.google.maps.services.DirectionsEvent;
+import com.google.maps.services.Route;
+import com.google.maps.services.Step;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -30,9 +35,10 @@ public class MyCustomInfoWindow extends UIComponent {
   public var link2:Button;
   [Bindable]public var routeList:ComboBox;
   [Bindable]public var routeNoList:ArrayCollection = new ArrayCollection();
+  [Bindable] public var directionsSteps:ArrayCollection = new ArrayCollection();
   public var routeNo:String= "";
-  [Bindable]private var _lat:String = "";
-  [Bindable]private var _lng:String = "";
+  private var _lat:String = "";
+  private var _lng:String = "";
   private var entranceLatLng:String = "55.912091,-3.313339";
   
   
@@ -120,7 +126,8 @@ public class MyCustomInfoWindow extends UIComponent {
  
  private function directionsClick(e:Event):void
  {
- 	
+ 	Application.application.filter.directionsGrid.dataProvider = directionsSteps;
+ 	Application.application.filter.directionsGrid.addEventListener(ListEvent.ITEM_CLICK, onGridClick);
  	Alert.show("I got here","here", Alert.OK);
 	var directions:Directions = new Directions();
     directions.addEventListener(DirectionsEvent.DIRECTIONS_SUCCESS, onDirectionsSuccess);
@@ -160,15 +167,37 @@ public class MyCustomInfoWindow extends UIComponent {
   
  private function onDirectionsSuccess(event:DirectionsEvent):void {
     Application.application.map.clearOverlays();
+    directionsSteps.removeAll();
+    var directions:Directions = event.directions;
+    var directionsPolyline:IPolyline = directions.createPolyline();
+    Application.application.map.addOverlay(directionsPolyline);
     
-	var directions:Directions = event.directions;
-	var directionsPolyline:IPolyline = directions.createPolyline();
-	Application.application.map.addOverlay(directionsPolyline);
+    var directionsBounds:LatLngBounds = directionsPolyline.getLatLngBounds();
+    Application.application.map.setCenter(directionsBounds.getCenter());
+    Application.application.map.setZoom(Application.application.map.getBoundsZoomLevel(directionsBounds));
+    
+    var startLatLng:LatLng = directions.getRoute(0).getStep(0).latLng;
+    var endLatLng:LatLng = directions.getRoute(directions.numRoutes-1).endLatLng;
+    Application.application.map.addOverlay(new Marker(startLatLng));
+    Application.application.map.addOverlay(new Marker(endLatLng));
+                   
+    for (var r:Number = 0 ; r < directions.numRoutes; r++ ) {
+        var route:Route = directions.getRoute(r);
 
-	var directionsBounds:LatLngBounds = directionsPolyline.getLatLngBounds();
-	Application.application.map.setCenter(directionsBounds.getCenter());
-	Application.application.map.setZoom(Application.application.map.getBoundsZoomLevel(directionsBounds));
- }
+    	for (var s:Number = 0 ; s < route.numSteps; s++ ) {
+            var step:Step = route.getStep(s);
+            directionsSteps.addItem(step);
+        }
+    }
+  }
+  
+  private function onGridClick(event:Event):void {
+    var latLng:LatLng = Application.application.filter.directionsGrid.selectedItem.latLng;
+    var opts:InfoWindowOptions = new InfoWindowOptions();
+    opts.contentHTML = Application.application.filter.directionsGrid.selectedItem.descriptionHtml;
+    Application.application.map.openInfoWindow(latLng, opts);
+  }
+
 
 }
 
