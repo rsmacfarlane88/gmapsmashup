@@ -176,7 +176,7 @@
 					source = "php/"+list[i].image_url;
 					
 					
-					test = new MyCustomInfoWindow(list[i].name,source,list[i].description);
+					test = new MyCustomInfoWindow(list[i].name,source,list[i].description, list[i].lat, list[i].lon);
 					
 					if(list[i].category == 8){
 						
@@ -281,7 +281,7 @@
 													iconOffset:new Point(-15, -15) 
 													}));
 					
-						var index:int = i;
+					var index:int = i;
 					var source:String;
 					for(var j:int=0; j<photoList.length; j++)
 					{
@@ -292,7 +292,7 @@
 					}
 						
 						var options:InfoWindowOptions = new InfoWindowOptions({
-													customContent:new MyCustomInfoWindow(list[i].name,source,list[i].description),
+													customContent:new MyCustomInfoWindow(list[i].name,source,list[i].description, list[i].lat, list[i].lon),
 													cornerRadius: 20,
                 									width: 320,
                 									height: 220,
@@ -313,7 +313,7 @@
 	
 	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
 	<mx:HTTPService id="photoService" url="php/Flickr/photoLoad.php" result="onPhotoResult(event)" />
-	<mx:HTTPService id="rss" result="onRSSResult" url="http://www.news.hw.ac.uk/hw-news.xml" resultFormat="e4x" />
+	<mx:HTTPService id="rss" result="onRSSResult(event)" url="http://www.news.hw.ac.uk/hw-news.xml" resultFormat="e4x" />
 	<custom:LoginDialogue horizontalCenter="0" verticalCenter="4" id="logindialogue1">
 	</custom:LoginDialogue>
 	
