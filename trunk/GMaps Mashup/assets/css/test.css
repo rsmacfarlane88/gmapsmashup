@@ -71,3 +71,23 @@ ComboBox {
    closeDuration: 584;
    textAlign: left;
 }
+
+DataGrid {
+   backgroundColor: #ffffff;
+   headerColors: #999999, #333333;
+   horizontalGridLines: false;
+   verticalGridLines: true;
+   verticalGridLineColor: #666666;
+   rollOverColor: #cccccc;
+   borderThickness: 0;
+   selectionColor: #999999;
+   textIndent: 0;
+   dropShadowEnabled: false;
+   headerStyleName: "mydataGridHeaderStyle";
+}
+
+.mydataGridHeaderStyle {
+   color: #ffffff;
+   letterSpacing: 1;
+   textAlign: left;
+}
