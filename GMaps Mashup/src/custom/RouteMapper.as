@@ -38,7 +38,7 @@ package custom
 			endRoute = new Button();
 			
 			//route controller
-			route_controller.width = 220;
+			route_controller.width = Application.application.map.width;
 			route_controller.height = 30;
 			route_controller.x = 0;
 			route_controller.y = 0;

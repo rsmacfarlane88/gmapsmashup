@@ -12,7 +12,7 @@
 			
 			private function init():void
 			{
-				
+				Security.allowDomain("http://lothianbuses.com");
 				this.height = Application.application.mapPanel.height *0.8;
 				this.width = Application.application.mapPanel.width * 0.8;
 				var x2:int = (Application.application.mapPanel.width - this.width) / 2;

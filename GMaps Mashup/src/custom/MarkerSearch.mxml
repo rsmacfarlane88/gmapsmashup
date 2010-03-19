@@ -80,7 +80,7 @@
 						var options:InfoWindowOptions = new InfoWindowOptions({
 													
 													//contentHTML:html,
-													customContent: new MyCustomInfoWindow(array[i].name,source,array[i].description),
+													customContent: new MyCustomInfoWindow(array[i].name,source,array[i].description, array[i].lat, array[i].lon),
 													cornerRadius: 20,
                 									width: 320,
                 									height: 220,
