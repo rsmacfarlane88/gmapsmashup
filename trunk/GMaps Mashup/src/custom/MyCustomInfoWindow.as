@@ -48,6 +48,7 @@ public class MyCustomInfoWindow extends UIComponent {
     _lng = lng;
     addChild(createInfoWindow(title, picture, description));
     cacheAsBitmap = true;
+    
  }
   
  public function createInfoWindow(title:String, picture:String, description:String):Canvas {
@@ -85,6 +86,7 @@ public class MyCustomInfoWindow extends UIComponent {
       link1.height = 15;
       link1.x = 5;
       link1.y = 170;
+      link1.addEventListener(MouseEvent.CLICK, openDirections);
       link1.addEventListener(MouseEvent.CLICK, directionsClick);
       link1.label = "Directions";
       
@@ -124,15 +126,23 @@ public class MyCustomInfoWindow extends UIComponent {
   	Application.application.addChild(page);
  }
  
+ 
+ private function openDirections(e:Event):void
+ {
+ 	
+ 	Application.application.filter.sidebar.selectedIndex = 1;
+ 	
+ }
  private function directionsClick(e:Event):void
  {
- 	Application.application.filter.directionsGrid.dataProvider = directionsSteps;
- 	Application.application.filter.directionsGrid.addEventListener(ListEvent.ITEM_CLICK, onGridClick);
- 	Alert.show("I got here","here", Alert.OK);
+ 	
+	
 	var directions:Directions = new Directions();
     directions.addEventListener(DirectionsEvent.DIRECTIONS_SUCCESS, onDirectionsSuccess);
     directions.addEventListener(DirectionsEvent.DIRECTIONS_FAILURE, onDirectionsFail);
     directions.load("from: " + entranceLatLng + " to: " + _lat+","+_lng);
+   
+    //
  }
  
  private function onResult(e:ResultEvent):void
@@ -166,11 +176,14 @@ public class MyCustomInfoWindow extends UIComponent {
  }        
   
  private function onDirectionsSuccess(event:DirectionsEvent):void {
+ 	
     Application.application.map.clearOverlays();
     directionsSteps.removeAll();
+    
     var directions:Directions = event.directions;
     var directionsPolyline:IPolyline = directions.createPolyline();
     Application.application.map.addOverlay(directionsPolyline);
+    
     
     var directionsBounds:LatLngBounds = directionsPolyline.getLatLngBounds();
     Application.application.map.setCenter(directionsBounds.getCenter());
@@ -180,15 +193,24 @@ public class MyCustomInfoWindow extends UIComponent {
     var endLatLng:LatLng = directions.getRoute(directions.numRoutes-1).endLatLng;
     Application.application.map.addOverlay(new Marker(startLatLng));
     Application.application.map.addOverlay(new Marker(endLatLng));
+    
+    Application.application.filter.directionsGrid.dataProvider = directionsSteps;
+    Application.application.filter.directionsGrid.addEventListener(ListEvent.ITEM_CLICK, onGridClick);
                    
     for (var r:Number = 0 ; r < directions.numRoutes; r++ ) {
         var route:Route = directions.getRoute(r);
-
+		
     	for (var s:Number = 0 ; s < route.numSteps; s++ ) {
             var step:Step = route.getStep(s);
             directionsSteps.addItem(step);
         }
+        
     }
+    
+    
+    
+    
+    
   }
   
   private function onGridClick(event:Event):void {
