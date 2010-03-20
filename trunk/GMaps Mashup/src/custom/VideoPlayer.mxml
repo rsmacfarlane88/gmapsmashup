@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="308" title="Video Player">
+	<mx:VideoDisplay x="0" y="0" width="380" height="236" id="videoPlayer" autoPlay="false" source="http://rsmacfarlane.com/Project/test.flv"/>
+	<mx:Button x="0" y="244" label="Play" id="btnPlay" click="videoPlayer.play()"/>
+	
+</mx:Panel>

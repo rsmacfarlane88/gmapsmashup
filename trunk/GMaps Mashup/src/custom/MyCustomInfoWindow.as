@@ -51,7 +51,7 @@ public class MyCustomInfoWindow extends UIComponent {
     _lat = lat;
     _lng = lng;
     tabNav.addChild(createInfoWindow(title, picture, description));
-    tabNav.addChild(createImageWindow());
+    tabNav.addChild(createImageWindow(picture));
     tabNav.addChild(createVideoWindow());
     addChild(tabNav);
     cacheAsBitmap = true;
@@ -136,7 +136,7 @@ public class MyCustomInfoWindow extends UIComponent {
       return can;
  }
  
- private function createImageWindow():Canvas
+ private function createImageWindow(picture:String):Canvas
  {
  	var can:Canvas = new Canvas();
       can.width = 315;
@@ -151,9 +151,16 @@ public class MyCustomInfoWindow extends UIComponent {
                 		Application.application.map.closeInfoWindow();
                 	});
                 	
-                	
+      var image:Image = new Image();
+      image.width = 250;
+      image.height = 200;
+      image.x = 5;
+      image.y = 5;
+      image.visible = true;
+      image.source = picture;          	
       
       can.addChild(close);
+      can.addChild(image);
       
       return can;
  }
