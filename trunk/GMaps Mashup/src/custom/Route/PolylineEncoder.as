@@ -4,6 +4,10 @@
 	/**
 	 * PolylineEncoder
 	 * @author Duncan Hall
+	 * @edited by Ross MacFarlane
+	 * @details The original version of this file used the Vector class
+	 * 			I changed this class to use an Array instead as this was
+	 * 			neccessary for this to function properly.
 	 */
 	
 	import com.google.maps.LatLng;
