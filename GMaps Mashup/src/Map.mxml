@@ -45,9 +45,10 @@
 			public var test:MyCustomInfoWindow; 
 			[Bindable]public var busNo:String = "";
 			[Bindable]public var acRSS:ArrayCollection;
+			[Bindable]public var encodedRoute:String = "";
 
 			private function init():void{
-				rss.send();
+				//rss.send();
 				//Security.allowDomain("http://rsmacfarlane.com");
 			}
 			

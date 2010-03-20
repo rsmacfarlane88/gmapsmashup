@@ -9,15 +9,17 @@
 			import mx.rpc.events.ResultEvent;
 			import custom.RouteMapper;
 			import mx.controls.Alert;
+			import mx.core.Application;
 			
 			[Bindable]public var list:ArrayCollection;
 			[Bindable]public var last:ArrayCollection = new ArrayCollection();
-			private var save:RouteMapper = new RouteMapper();
+			[Bindable]private var save:RouteMapper = new RouteMapper();
 			[Bindable]private var names:String;
 			[Bindable]private var description:String;
 			[Bindable]public var lastRouteID:String;
 			[Bindable]private var latlngs:Array;
 			[Bindable]private var current_latlng:String;
+			[Bindable]private var encodedRoute:String;
 			
 			private function init():void
 			{
@@ -41,18 +43,21 @@
 			
 			private function checkLastResult(e:ResultEvent):void
 			{
-				lastRouteSaved.send();
+				//lastRouteSaved.send();
 			}
 			
 			private function onSubmit(e:MouseEvent):void
 			{
 				names = txtName.text;
 				description = txtDescription.text;
+				//Alert.show(encodedLine, "Test", Alert.OK);
 				routeDetails.send();
-				
-				
-				
-				
+				//Alert.show(encodedLine, "Test", Alert.OK);
+			}
+			
+			public function setEncodedRoute(encodedLine:String):void
+			{
+				encodedRoute = encodedLine;
 			}
 			
 			private function sendRouteData():void
@@ -63,7 +68,7 @@
 				for (var i:int=0; i < latlngs.length; i++)
      			{
      				current_latlng = latlngs[i];
-     				routeDataService.send();
+     				
      			}
 			}
 			
@@ -101,29 +106,9 @@
 		<category>
 			{cbCategory.selectedIndex+1}
 		</category>
+		<encoded_line>
+			{encodedRoute}
+		</encoded_line>
 	</mx:request>
-	</mx:HTTPService>
-	<mx:HTTPService id="lastRouteSaved" url="php/Route/lastRoute.php" method="POST" result="lastRouteResult(event)">
-		<mx:request xmlns="">
-		<name>
-			{names}
-		</name>
-		<description>
-			{description}
-		</description>
-		<category>
-			{cbCategory.selectedIndex+1}
-		</category>
-		</mx:request>
-	</mx:HTTPService>
-	<mx:HTTPService id="routeDataService" url="php/Route/sendRouteData.php" method="POST">
-		<mx:request xmlns="">
-		<latlng>
-			{"Test"}
-		</latlng>
-		<routeID>
-			{2}
-		</routeID>
-		</mx:request>
 	</mx:HTTPService>
 </mx:Canvas>
