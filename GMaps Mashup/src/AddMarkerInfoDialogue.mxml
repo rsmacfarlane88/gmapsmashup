@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" x="28" y="151" width="296" height="302"
 	 cornerRadius="12" borderStyle="solid" alpha="0.76" backgroundAlpha="1.0" backgroundColor="#FFFFFF" xmlns:ns1="custom.upload.*" 
-	 xmlns:file="custom.upload.flashdev.file.*">
+	 xmlns:file="custom.upload.flashdev.file.*" xmlns:custom="custom.*">
 	
 	
 	<mx:Script>
@@ -14,21 +14,28 @@
 			import mx.core.Application;
 			import mx.controls.Alert;
 			
+			
 			private var imageURL:String="null";
+			private var videoURL:String="null";
 			private var user_image_dir:String="";
 			private var urlRequest:URLRequest;
 			private var fileReferenceList:FileReferenceList;
+			private var videoFRList:FileReferenceList;
 			private var imageTypes:FileFilter = new FileFilter("Image:*.jpg;*.jpeg;*.gif;*.png","*.jpg;*.jpeg;*.gif;*.png");
+			private var videoTypes:FileFilter = new FileFilter("Video (*.flv,*.mov,*.avi,*.mp4,*.wmv,*.mpeg)",
+                                     "*.flv;*.mov;*.avi;*.mp4;*.wmv;*.mpeg"); 
+
 			private var serverSideScript:String = "php/media/uploadFile.php";
 			private var _numCurrentUpload:Number = 0;
 			private var myVar:String;
 			private var uploadedImageURL:String;
+			private var uploadedVideoURL:String;
 			
 			
 			//private const _strDomain:String = new String("http://www.rsmacfarlane.com");
 			//private const _strUploadScript:String = new String(_strDomain + "/Project/custom/upload/upload.php");
 		
-		
+			
 			private var markerName:String;
 			public var markerLatLng:LatLng;
 			[Bindable]private var list:ArrayCollection;
@@ -39,7 +46,10 @@
 				
 				urlRequest = new URLRequest(serverSideScript);
 				fileReferenceList = new FileReferenceList();
-				fileReferenceList.addEventListener(Event.SELECT, fileSelectedHandler);
+				fileReferenceList.addEventListener(Event.SELECT, imageSelectedHandler);
+				
+				videoFRList = new FileReferenceList();
+				videoFRList.addEventListener(Event.SELECT, videoSelectedHandler);
 
 			}
 			
@@ -91,13 +101,15 @@
 				
 			}
 			
-			private function uploadFile():void {
+			//UPLOAD IMAGE
+			
+			private function uploadImage():void {
 				
 				fileReferenceList.browse([imageTypes]);
 				
 			}
 			
-			private function fileSelectedHandler(event:Event):void {
+			private function imageSelectedHandler(event:Event):void {
 				Alert.show("File Uploading...");
 				var fileReference:FileReference;
 				var fileReferenceList:FileReferenceList = FileReferenceList(event.target);
@@ -108,8 +120,8 @@
 				
 				
 				// upload the file to the server side script
-				fileReference.addEventListener(Event.COMPLETE, uploadCompleteHandler);
-				fileReference.addEventListener(ProgressEvent.PROGRESS, onUploadProgress);
+				fileReference.addEventListener(Event.COMPLETE, imageUploadCompleteHandler);
+				fileReference.addEventListener(ProgressEvent.PROGRESS, onImageUploadProgress);
 				//fileReference.upload(urlRequest+"?myVar='Rosco'");
 				
 				var currentDate:Date = new Date();
@@ -118,10 +130,10 @@
 				
 				// update the status text
 				statusText.text = "Uploading...";
-				updateProgBar();
+				updateImageProgBar();
 			}
 			
-			private function uploadCompleteHandler(event:Event):void {
+			private function imageUploadCompleteHandler(event:Event):void {
 				statusText.text = "Image Uploaded: " + event.target.name;
 				imageURL="media/"+myVar+event.target.name;
 				uploadedImageURL = imageURL;
@@ -138,15 +150,15 @@
 			}
 			
 			// Get upload progress
-			private function onUploadProgress(event:ProgressEvent):void {
+			private function onImageUploadProgress(event:ProgressEvent):void {
 				var numPerc:Number = Math.round((event.bytesLoaded / event.bytesTotal) * 100);
-				updateProgBar(numPerc);
+				updateImageProgBar(numPerc);
 				var evt:ProgressEvent = new ProgressEvent("uploadProgress", false, false, event.bytesLoaded, event.bytesTotal);
 				dispatchEvent(evt);
 			}
 			
 			// Update progBar
-			private function updateProgBar(numPerc:Number = 0):void {
+			private function updateImageProgBar(numPerc:Number = 0):void {
 				var strLabel:String = (_numCurrentUpload + 1) + "/" + fileReferenceList.fileList.length;
 				strLabel = (_numCurrentUpload + 1 <= fileReferenceList.fileList.length && numPerc > 0 && numPerc < 100) ? numPerc + "% - " + strLabel : strLabel;
 				strLabel = (_numCurrentUpload + 1 == fileReferenceList.fileList.length && numPerc == 100) ? "Upload Complete - " + strLabel : strLabel;
@@ -156,6 +168,72 @@
 				progBar.validateNow();
 			}
 			
+			
+			////VIDEO UPLOAD
+			private function uploadVideo():void {
+				
+				videoFRList.browse([videoTypes]);
+				
+			}
+			
+			private function videoSelectedHandler(event:Event):void {
+				Alert.show("File Uploading...");
+				var fileReference:FileReference;
+				var fileReferenceList:FileReferenceList = FileReferenceList(event.target);
+				var fileList:Array = fileReferenceList.fileList;
+
+				// get the first file that the user chose
+				fileReference = FileReference(fileList[0]);
+				
+				
+				// upload the file to the server side script
+				fileReference.addEventListener(Event.COMPLETE, videoUploadCompleteHandler);
+				fileReference.addEventListener(ProgressEvent.PROGRESS, onVideoUploadProgress);
+				//fileReference.upload(urlRequest+"?myVar='Rosco'");
+				
+				var currentDate:Date = new Date();
+				myVar = dateFormatter.format(currentDate);
+				fileReference.upload(new URLRequest("php/media/uploadFile.php?myVar="+myVar));
+				
+				// update the status text
+				lblVideoStatus.text = "Uploading...";
+				updateVideoProgBar();
+			}
+			
+			private function videoUploadCompleteHandler(event:Event):void {
+				lblVideoStatus.text = "Video Uploaded: " + event.target.name;
+				videoURL="media/"+myVar+event.target.name;
+				uploadedVideoURL = videoURL;
+				setVideo();
+			}
+			
+			private function setVideo():void{
+			//image.source=imageURL;
+			Alert.show(videoURL,"UPLOAD COMPLETE");
+			}
+			
+			public function return_videoURL():String{
+				return videoURL;
+			}
+			
+			// Get upload progress
+			private function onVideoUploadProgress(event:ProgressEvent):void {
+				var numPerc:Number = Math.round((event.bytesLoaded / event.bytesTotal) * 100);
+				updateVideoProgBar(numPerc);
+				var evt:ProgressEvent = new ProgressEvent("uploadProgress", false, false, event.bytesLoaded, event.bytesTotal);
+				dispatchEvent(evt);
+			}
+			
+			// Update progBar
+			private function updateVideoProgBar(numPerc:Number = 0):void {
+				var strLabel:String = (_numCurrentUpload + 1) + "/" + videoFRList.fileList.length;
+				strLabel = (_numCurrentUpload + 1 <= videoFRList.fileList.length && numPerc > 0 && numPerc < 100) ? numPerc + "% - " + strLabel : strLabel;
+				strLabel = (_numCurrentUpload + 1 == videoFRList.fileList.length && numPerc == 100) ? "Upload Complete - " + strLabel : strLabel;
+				strLabel = (videoFRList.fileList.length == 0) ? "" : strLabel;
+				progBarVideo.label = strLabel;
+				progBarVideo.setProgress(numPerc, 100);
+				progBarVideo.validateNow();
+			}
 		]]>
 	</mx:Script>
 	
@@ -164,7 +242,7 @@
 			<mx:RemoveChild target="{btnCancel}"/>
 			<mx:RemoveChild target="{btnSubmit}"/>
 			<mx:RemoveChild target="{lblImage}"/>
-			<mx:RemoveChild target="{btnBrowse}"/>
+			<mx:RemoveChild target="{btnImageBrowse}"/>
 			<mx:RemoveChild target="{lblType}"/>
 			<mx:RemoveChild target="{cbCategory}"/>
 			<mx:RemoveChild target="{lblDescription}"/>
@@ -182,7 +260,6 @@
 			</mx:AddChild>
 		</mx:State>
 	</mx:states>
-	
 	<mx:Label x="10" y="10" text="Marker Information" id="lblTitle" fontFamily="Arial" fontSize="20" fontWeight="bold" textDecoration="underline"/>
 	<mx:Label x="21" y="58" text="Name" id="lblName" fontFamily="Arial" fontSize="12" width="75" textAlign="right"/>
 	<mx:TextInput x="104" y="58" id="txtName" maxChars="255" fontFamily="Arial" fontSize="11" width="180"/>
@@ -196,10 +273,14 @@
 	<mx:ComboBox id="cbCategory" x="104" y="116" width="180" dataProvider="{list}" selectedIndex="0" labelField="cat" cornerRadius="10"/>
 	<mx:Label x="10" y="161" visible="false" color="red" text="Please enter all details for the marker" width="274" textAlign="center" id="msgInvalid"/>
 	<mx:Label x="13" y="146" text="Upload Image" id="lblImage" textAlign="right" fontFamily="Arial" fontSize="12"/>
-	<mx:Button x="104" y="146" label="Browse" id="btnBrowse" click="uploadFile()"/>
-	<mx:Label x="180" y="148" width="104" id="statusText"/>
+	<mx:Button x="104" y="146" label="Browse" id="btnImageBrowse" click="uploadImage()" width="54" paddingLeft="3" paddingRight="3"/>
+	<mx:Label x="166" y="148" width="118" id="statusText"/>
 	<mx:ProgressBar x="104" y="174" id="progBar" mode="manual" label="" labelPlacement="center" width="180" paddingLeft="0" paddingRight="0"/>
 	<mx:DateFormatter id="dateFormatter" formatString="DDMMMYYYY-HNNSS-"/> 
+	<mx:Label x="13" y="204" text="Upload Video" width="83" textAlign="right" fontFamily="Arial" fontSize="12"/>
+	<mx:Button x="104" y="202" label="Browse" id="btnVideoBrowse" click="uploadVideo()" paddingLeft="3" paddingRight="3"/>
+	<mx:ProgressBar x="104" y="232" labelPlacement="center" mode="manual" label="" width="180" id="progBarVideo" paddingLeft="0" paddingRight="0"/>
+	<mx:Label x="166" y="204" width="118" id="lblVideoStatus"/>
 	
 	
 
