@@ -15,6 +15,7 @@ import flash.events.MouseEvent;
 
 import mx.collections.ArrayCollection;
 import mx.containers.Canvas;
+import mx.containers.TabNavigator;
 import mx.controls.Alert;
 import mx.controls.Button;
 import mx.controls.ComboBox;
@@ -40,21 +41,36 @@ public class MyCustomInfoWindow extends UIComponent {
   private var _lat:String = "";
   private var _lng:String = "";
   private var entranceLatLng:String = "55.912091,-3.313339";
-  
+  public var tabNav:TabNavigator = new TabNavigator();
   
  public function MyCustomInfoWindow(title:String, picture:String, description:String, lat:String, lng:String) {
  	
+    tabNav.width = 320;
+    tabNav.height = 225;
+
     _lat = lat;
     _lng = lng;
-    addChild(createInfoWindow(title, picture, description));
+    tabNav.addChild(createInfoWindow(title, picture, description));
+    tabNav.addChild(createImageWindow());
+    tabNav.addChild(createVideoWindow());
+    addChild(tabNav);
     cacheAsBitmap = true;
     
  }
   
  public function createInfoWindow(title:String, picture:String, description:String):Canvas {
       var can:Canvas = new Canvas();
-      can.width = 300;
-      can.height = 210;
+      can.width = 315;
+      can.height = 220;
+      can.label = "Info";
+      
+      var close:LinkButton = new LinkButton();
+      close.x = 280;
+      close.y = 5;
+      close.label = "X";
+      close.addEventListener(MouseEvent.CLICK, function(e:Event):void {
+                		Application.application.map.closeInfoWindow();
+                	});
       
       var heading:Label = new Label();
       heading.height = 20;
@@ -94,7 +110,7 @@ public class MyCustomInfoWindow extends UIComponent {
       link2 = new Button();
       link2.width = 90;
       link2.height = 15;
-      link2.x = 150;
+      link2.x = 200;
       link2.y = 170;
       link2.addEventListener(MouseEvent.CLICK, showPage);
       link2.label = "Timetable";
@@ -109,12 +125,57 @@ public class MyCustomInfoWindow extends UIComponent {
       routeList.selectedIndex = 0;
       routeList.visible = false;
       
+      can.addChild(close);
       can.addChild(heading);
       can.addChild(image);
       can.addChild(desc);
       can.addChild(link1);
       can.addChild(link2);
       can.addChild(routeList);
+      
+      return can;
+ }
+ 
+ private function createImageWindow():Canvas
+ {
+ 	var can:Canvas = new Canvas();
+      can.width = 315;
+      can.height = 220;
+      can.label = "Images";
+      
+      var close:LinkButton = new LinkButton();
+      close.x = 280;
+      close.y = 5;
+      close.label = "X";
+      close.addEventListener(MouseEvent.CLICK, function(e:Event):void {
+                		Application.application.map.closeInfoWindow();
+                	});
+                	
+                	
+      
+      can.addChild(close);
+      
+      return can;
+ }
+ 
+ private function createVideoWindow():Canvas
+ {
+ 	var can:Canvas = new Canvas();
+      can.width = 315;
+      can.height = 220;
+      can.label = "Videos";
+      
+      var close:LinkButton = new LinkButton();
+      close.x = 280;
+      close.y = 5;
+      close.label = "X";
+      close.addEventListener(MouseEvent.CLICK, function(e:Event):void {
+                		Application.application.map.closeInfoWindow();
+                	});
+                	
+                	
+      
+      can.addChild(close);
       
       return can;
  }
