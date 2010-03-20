@@ -152,10 +152,10 @@ public class MyCustomInfoWindow extends UIComponent {
                 	});
                 	
       var image:Image = new Image();
-      image.width = 250;
-      image.height = 200;
-      image.x = 5;
-      image.y = 5;
+      image.width = 230;
+      image.height = 150;
+      image.x = 15;
+      image.y = 10;
       image.visible = true;
       image.source = picture;          	
       

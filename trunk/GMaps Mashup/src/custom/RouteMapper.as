@@ -5,6 +5,8 @@ package custom
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.Polyline;
 	
+	import custom.Route.PolylineEncoder;
+	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
@@ -14,7 +16,7 @@ package custom
 	import mx.controls.RadioButton;
 	import mx.core.Application;
 	import mx.core.UIComponent;
-	import mx.rpc.http.HTTPService;
+	
 
 
 	public class RouteMapper extends UIComponent
@@ -22,12 +24,13 @@ package custom
 		private var testPoint:Marker;
     	public var polyLatLngs:Array = new Array();
     	private var polyShape;
-	
+		
 		private var route_controller:HBox;
 		private var drawmode_polyline:RadioButton;
 		private var clearMap:Button;
 		private var deleteLast:Button;
 		private var endRoute:Button;
+		[Bindable]public var encodedLine:String;
 		 
 		
 		public function RouteMapper()
@@ -118,9 +121,13 @@ package custom
      	public function routeEnd(e:MouseEvent):void
      	{
      		var addRoute:RouteDetailsDialog = new RouteDetailsDialog();
+     		var encoder:PolylineEncoder;
+     		encoder = new PolylineEncoder();
+     		encodedLine = encoder.fromPoints(polyLatLngs);
+     		addRoute.setEncodedRoute(encodedLine);
      		
  			Alert.show("You have finished mapping a route.\n" + 
- 					"You will have the choice to save it to the database.",
+ 					"You will have the choice to save it to the database.\n" + encodedLine ,
  					"End of Route",
  					Alert.OK);
  					
