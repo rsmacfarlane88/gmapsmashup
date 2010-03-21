@@ -6,6 +6,7 @@
 		import mx.collections.ArrayCollection;
 		import mx.rpc.events.ResultEvent;
 		import mx.core.Application;
+		import mx.controls.Alert;
 		
 		
 		private function selectedLoginType(e:Event):void
@@ -24,10 +25,11 @@
 			if(e.result.loginsuccess == "yes")
 			{
 				msgValid.visible = true;
-				
+				Application.application.userLoggedIn = txtUsername.text;
 				this.r1.play([this]);
 				this.removeAllChildren();
 				Application.application.currentState = "loggedin";
+				Alert.show(Application.application.userLoggedIn,"Who is online", Alert.OK);
 				
 			}
 			
@@ -63,7 +65,7 @@
 	<mx:HRule x="30" y="108" width="320"/>
 	<mx:Button x="99.75" y="201" label="Login" id="btnLogin" click="loginService.send()" tabIndex="2" width="80"/>
 	<mx:Button x="150" y="231" label="Cancel" id="btnCancel" click="cancel_Click(event)" tabIndex="3" width="80"/>
-	<mx:HTTPService id="loginService" url="php/loginValidate.php" result="onResult(event)" method="POST" showBusyCursor="true" useProxy="false">
+	<mx:HTTPService id="loginService" url="php/Login/loginValidate.php" result="onResult(event)" method="POST" showBusyCursor="true" useProxy="false">
 	<mx:request xmlns="">
 		<username>
 			{txtUsername.text}
