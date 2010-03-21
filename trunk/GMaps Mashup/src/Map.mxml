@@ -46,6 +46,7 @@
 			[Bindable]public var busNo:String = "";
 			[Bindable]public var acRSS:ArrayCollection;
 			[Bindable]public var encodedRoute:String = "";
+			[Bindable]public var userLoggedIn:String;
 
 			private function init():void{
 				//rss.send();
@@ -339,13 +340,12 @@
 				</custom:MapFilter>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Panel layout="absolute" right="31" top="35" headerHeight="9" height="64" width="143">
-					<mx:Button label="Help" height="25" width="80" verticalCenter="1" horizontalCenter="0"/>
-				</mx:Panel>
+				<custom:MarkerSearch top="35" left="285" right="268">
+				</custom:MarkerSearch>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<custom:MarkerSearch top="35" left="285" right="192">
-				</custom:MarkerSearch>
+				<custom:MenuBar height="64" right="31" top="35" width="218">
+				</custom:MenuBar>
 			</mx:AddChild>
 		</mx:State>
 		<mx:State name="register">

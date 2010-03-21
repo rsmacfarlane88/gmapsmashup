@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="218" height="60" headerHeight="7">
+
+<mx:Script>
+	<![CDATA[
+		import mx.controls.*;
+        import mx.events.*;
+
+        private var myMenu:Menu;
+
+		
+		private function initMenu():void
+		{
+			myMenu = new Menu();
+                var dp:Object = [
+                  {label: "Change Password"}, 
+                  {label: "Statistics"}, 
+                  {label: "Help"}, 
+                  {label: "Log Out"}
+                ];        
+                myMenu.dataProvider = dp;
+                myMenu.addEventListener("itemClick", changeHandler);
+                mainMenu.popUp = myMenu;
+		}
+		
+		 private function changeHandler(event:MenuEvent):void {
+                var label:String = event.label;        
+                mainMenu.close();
+            }
+
+	]]>
+</mx:Script>
+
+	<mx:PopUpButton label="Menu" id="mainMenu" verticalCenter="0" left="10" right="99" creationComplete="initMenu()" textAlign="left"/>
+	<mx:Button label="Help" id="btnHelp" verticalCenter="0" left="107" right="10"/>
+</mx:Panel>
