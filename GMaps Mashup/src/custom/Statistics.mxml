@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="318" height="226" title="Statistics">
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.ResultEvent;
+			
+			
+			private function onResult(e:ResultEvent):void
+			{
+				
+			}
+		]]>
+	</mx:Script>
+	<mx:HTTPService id="statsService" url="getStats.php" result="onResult(event)" />
+	<mx:Label x="10" y="37" text="Number of markers" width="128" textAlign="right" id="lblNoMarkers"/>
+	<mx:TextArea x="146" y="36" width="142" height="19" id="txtNoMarkers" editable="false"/>
+	<mx:Button x="115.5" y="152" label="OK" width="67"/>
+	
+</mx:Panel>
