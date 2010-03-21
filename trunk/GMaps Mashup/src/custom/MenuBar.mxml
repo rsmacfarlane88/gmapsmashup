@@ -3,9 +3,11 @@
 
 <mx:Script>
 	<![CDATA[
+		import custom.users.PasswordChanger;
 		import mx.controls.*;
         import mx.events.*;
-
+        import mx.core.Application;
+        
         private var myMenu:Menu;
 
 		
@@ -25,6 +27,17 @@
 		
 		 private function changeHandler(event:MenuEvent):void {
                 var label:String = event.label;        
+                
+                if(label == "Change Password"){
+                	var changePass:PasswordChanger = new PasswordChanger();
+                	Application.application.addChild(changePass);
+                }
+                if(label == "Log Out"){
+                	Application.application.currentState = "";
+                	Application.application.userLoggedIn = "";
+                }
+                
+                
                 mainMenu.close();
             }
 
