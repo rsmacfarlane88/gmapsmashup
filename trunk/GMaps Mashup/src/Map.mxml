@@ -51,17 +51,18 @@
 			private function init():void{
 				//rss.send();
 				//Security.allowDomain("http://rsmacfarlane.com");
+				service.addEventListener(ResultEvent.RESULT, onResult,false,0,true);
 			}
 			
 			private function setFilterEvents():void{
-				this.filter.checkAll.addEventListener(Event.CHANGE,checkSelectedFilters);
-				this.filter.checkBuildings.addEventListener(Event.CHANGE,checkSelectedFilters);
-				this.filter.checkAccommodation.addEventListener(Event.CHANGE,checkSelectedFilters);
-				this.filter.checkShop.addEventListener(Event.CHANGE,checkSelectedFilters);
-				this.filter.checkFood.addEventListener(Event.CHANGE,checkSelectedFilters);
-				this.filter.checkEntertainment.addEventListener(Event.CHANGE,checkSelectedFilters);
-				this.filter.checkBank.addEventListener(Event.CHANGE,checkSelectedFilters);
-				this.filter.checkParking.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkAll.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
+				this.filter.checkBuildings.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
+				this.filter.checkAccommodation.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
+				this.filter.checkShop.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
+				this.filter.checkFood.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
+				this.filter.checkEntertainment.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
+				this.filter.checkBank.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
+				this.filter.checkParking.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
 			}
 			
 			private function onReady(e:MapEvent):void
@@ -81,7 +82,7 @@
             	var latlng:LatLng;
             	menu.addEventListener(ContextMenuEvent.MENU_SELECT, function(e:ContextMenuEvent):void {
                		latlng = map.fromViewportToLatLng(new Point(e.mouseTarget.mouseX, e.mouseTarget.mouseY));
-            	});
+            	},false,0,true);
             
             	var menuItem1:ContextMenuItem = new ContextMenuItem('Add Marker');
 	            	menuItem1.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(e:ContextMenuEvent):void {
@@ -102,14 +103,14 @@
 	 				marker.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
 	                	marker.openInfoWindow(options); 
 	                	
-	 				});
+	 				},false,0,true);
 	               	map.addOverlay(marker);
 	               	//marker.openInfoWindow(options);
                	
-               	});
+               	},false,0,true);
                	
                	var menuItem2:ContextMenuItem = new ContextMenuItem("Add Route");
-               	menuItem2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,  addRoute);
+               	menuItem2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,  addRoute,false,0,true);
            
             
             	menu.customItems.push(menuItem1);
@@ -123,7 +124,7 @@
         		route = new RouteMapper();
         		mapPanel.addChild(route);
         		
-        		map.addEventListener(MapMouseEvent.CLICK, route.mapClick);
+        		map.addEventListener(MapMouseEvent.CLICK, route.mapClick,false,0,true);
         		
         		
         		
@@ -134,7 +135,7 @@
         				
         		//this.addEventListener(KeyboardEvent.KEY_DOWN, route.saveRoute);
         		
-        		map.addEventListener(MapMouseEvent.CLICK, route.routeEnd);		
+        		map.addEventListener(MapMouseEvent.CLICK, route.routeEnd,false,0, true);		
         		
         	}
 			
@@ -174,8 +175,13 @@
 						}
 					}
 					
-					//source = "http://www.rsmacfarlane.com/Project/Uploads/Koala.jpg";
-					source = "php/"+list[i].image_url;
+					
+					if(list[i].image_url == "" || list[i].image_url == null)
+					{
+						source = "php/media/noImage.jpg";
+					}else{
+						source = "php/"+list[i].image_url;
+					}
 					
 					
 					test = new MyCustomInfoWindow(list[i].name,source,list[i].description, list[i].lat, list[i].lon);
@@ -210,7 +216,7 @@
 			{
 				m.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
                 		m.openInfoWindow(o);
-                	});
+                	} ,false,0,true);
                 	
                 	 map.addOverlay(m);
                 	 
@@ -314,7 +320,7 @@
 		]]>
 	</mx:Script>
 	
-	<mx:HTTPService id="service" url="php/mapLoad.php" result="onResult(event)"/>
+	<mx:HTTPService id="service" url="php/mapLoad.php"/>
 	<mx:HTTPService id="photoService" url="php/Flickr/photoLoad.php" result="onPhotoResult(event)" />
 	<mx:HTTPService id="rss" result="onRSSResult(event)" url="http://www.news.hw.ac.uk/hw-news.xml" resultFormat="e4x" />
 	<custom:LoginDialogue horizontalCenter="0" verticalCenter="4" id="logindialogue1">

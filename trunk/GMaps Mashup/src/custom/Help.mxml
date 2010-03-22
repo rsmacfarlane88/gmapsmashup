@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="552" height="532" title="Help">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			
+			private function onClick(e:MouseEvent):void
+			{
+				Application.application.removeChild(this);
+			}
+		]]>
+	</mx:Script>
+<mx:TextArea left="0" top="0" right="0" bottom="0" id="txtHelp" wordWrap="true" editable="false" textAlign="left">
+	<mx:htmlText>
+		
+	
+		<![CDATA[
+		<b><u><br><font color="#000000" size="16">Help Section</font></u></b>
+		<br><font color="#000000" size="12">Intro</font>
+		<br><font color="#000000" size="11">This is the introduction part of the help section where I will explain what I am going to be talking about. This is just a lot of rubbish just now but I will fill this with more sensible stuff shortly.</font>
+		]]>
+	
+	</mx:htmlText>
+</mx:TextArea>
+	<mx:ControlBar>
+		<mx:Button label="Close" id="btnClose" click="onClick(event)"/>
+	</mx:ControlBar>
+	
+	
+</mx:Panel>

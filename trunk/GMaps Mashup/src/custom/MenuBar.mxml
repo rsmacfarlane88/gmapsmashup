@@ -21,8 +21,9 @@
                   {label: "Log Out"}
                 ];        
                 myMenu.dataProvider = dp;
-                myMenu.addEventListener("itemClick", changeHandler);
+                myMenu.addEventListener("itemClick", changeHandler,null,null,true);
                 mainMenu.popUp = myMenu;
+                
 		}
 		
 		 private function changeHandler(event:MenuEvent):void {
@@ -40,6 +41,10 @@
                 if(label == "Log Out"){
                 	Application.application.currentState = "";
                 	Application.application.userLoggedIn = "";
+                }
+                if(label == "Help"){
+                	var help:Help = new Help();
+                	Application.application.addChild(help);
                 }
                 
                 
