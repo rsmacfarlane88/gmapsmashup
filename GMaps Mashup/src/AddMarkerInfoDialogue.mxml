@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" x="28" y="151" width="296" height="302"
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" x="28" y="151" width="312" height="358"
 	 cornerRadius="12" borderStyle="solid" alpha="0.76" backgroundAlpha="1.0" backgroundColor="#FFFFFF" xmlns:ns1="custom.upload.*" 
 	 xmlns:file="custom.upload.flashdev.file.*" xmlns:custom="custom.*">
 	
@@ -263,24 +263,24 @@
 	<mx:Label x="10" y="10" text="Marker Information" id="lblTitle" fontFamily="Arial" fontSize="20" fontWeight="bold" textDecoration="underline"/>
 	<mx:Label x="21" y="58" text="Name" id="lblName" fontFamily="Arial" fontSize="12" width="75" textAlign="right"/>
 	<mx:TextInput x="104" y="58" id="txtName" maxChars="255" fontFamily="Arial" fontSize="11" width="180"/>
-	<mx:Button x="78" y="265" label="Save" id="btnSubmit" fontFamily="Arial" fontSize="12" click="onSubmit(event)" width="65"/>
-	<mx:Button x="151" y="265" label="Cancel" id="btnCancel" fontFamily="Arial" fontSize="12" click="onCancel(event)"/>
+	<mx:Button x="86" y="321" label="Save" id="btnSubmit" fontFamily="Arial" fontSize="12" click="onSubmit(event)" width="65"/>
+	<mx:Button x="159" y="321" label="Cancel" id="btnCancel" fontFamily="Arial" fontSize="12" click="onCancel(event)"/>
 	<mx:HTTPService id="addMarkerService" url="php/Marker/addMarker.php"/>
 	<mx:HTTPService id="categoryProvider" url="php/Marker/categorySelectionLoad.php" result="onResult(event)"/>
 	<mx:Label x="21" y="87" text="Description" id="lblDescription" fontFamily="Arial" fontSize="12" textAlign="right" width="75"/>
-	<mx:TextInput x="104" y="86" id="txtDescription" fontFamily="Arial" fontSize="11" width="180"/>
-	<mx:Label x="21" y="117" text="Marker Type" width="75" id="lblType" height="21" fontFamily="Arial" fontSize="12" textAlign="right"/>
-	<mx:ComboBox id="cbCategory" x="104" y="116" width="180" dataProvider="{list}" selectedIndex="0" labelField="cat" cornerRadius="10"/>
+	<mx:TextArea x="104" y="86" id="txtDescription" fontFamily="Arial" fontSize="11" width="180" editable="true" wordWrap="true" maxChars="200" height="58"/>
+	<mx:Label x="21" y="153" text="Marker Type" width="75" id="lblType" height="21" fontFamily="Arial" fontSize="12" textAlign="right"/>
+	<mx:ComboBox id="cbCategory" x="104" y="152" width="180" dataProvider="{list}" selectedIndex="0" labelField="cat" cornerRadius="10"/>
 	<mx:Label x="10" y="161" visible="false" color="red" text="Please enter all details for the marker" width="274" textAlign="center" id="msgInvalid"/>
-	<mx:Label x="13" y="146" text="Upload Image" id="lblImage" textAlign="right" fontFamily="Arial" fontSize="12"/>
-	<mx:Button x="104" y="146" label="Browse" id="btnImageBrowse" click="uploadImage()" width="54" paddingLeft="3" paddingRight="3"/>
-	<mx:Label x="166" y="148" width="118" id="statusText"/>
-	<mx:ProgressBar x="104" y="174" id="progBar" mode="manual" label="" labelPlacement="center" width="180" paddingLeft="0" paddingRight="0"/>
+	<mx:Label x="13" y="191" text="Upload Image" id="lblImage" textAlign="right" fontFamily="Arial" fontSize="12"/>
+	<mx:Button x="104" y="191" label="Browse" id="btnImageBrowse" click="uploadImage()" width="54" paddingLeft="3" paddingRight="3"/>
+	<mx:Label x="166" y="193" width="118" id="statusText"/>
+	<mx:ProgressBar x="104" y="219" id="progBar" mode="manual" label="" labelPlacement="center" width="180" paddingLeft="0" paddingRight="0"/>
 	<mx:DateFormatter id="dateFormatter" formatString="DDMMMYYYY-HNNSS-"/> 
-	<mx:Label x="13" y="204" text="Upload Video" width="83" textAlign="right" fontFamily="Arial" fontSize="12"/>
-	<mx:Button x="104" y="202" label="Browse" id="btnVideoBrowse" click="uploadVideo()" paddingLeft="3" paddingRight="3"/>
-	<mx:ProgressBar x="104" y="232" labelPlacement="center" mode="manual" label="" width="180" id="progBarVideo" paddingLeft="0" paddingRight="0"/>
-	<mx:Label x="166" y="204" width="118" id="lblVideoStatus"/>
+	<mx:Label x="13" y="249" text="Upload Video" width="83" textAlign="right" fontFamily="Arial" fontSize="12"/>
+	<mx:Button x="104" y="247" label="Browse" id="btnVideoBrowse" click="uploadVideo()" paddingLeft="3" paddingRight="3"/>
+	<mx:ProgressBar x="104" y="277" labelPlacement="center" mode="manual" label="" width="180" id="progBarVideo" paddingLeft="0" paddingRight="0"/>
+	<mx:Label x="166" y="249" width="118" id="lblVideoStatus"/>
 	
 	
 

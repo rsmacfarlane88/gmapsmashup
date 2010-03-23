@@ -104,6 +104,15 @@
 				
 			}
 			
+			private function checkInput(e:Event):void
+			{
+				if(txtUsername.text !="" && txtEmail.text != ""){
+					btnSubmit.enabled = true;
+				}else{
+					btnSubmit.enabled = false;
+				}
+			}
+			
 		]]>
 	</mx:Script>
 	
@@ -112,29 +121,29 @@
 			<mx:RemoveChild target="{btnContinue}"/>
 			<mx:RemoveChild target="{txtPreRegister}"/>
 			<mx:AddChild position="lastChild">
-				<mx:Label x="60" y="37" text="Username" width="92" id="lblUsername"/>
+				<mx:Label x="60" y="84" text="Username" width="92" id="lblUsername"/>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Label x="60" y="67" text="Email*" width="92" id="lblEmail"/>
+				<mx:Label x="60" y="114" text="Email*" width="92" id="lblEmail"/>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:TextInput x="160" y="35" id="txtUsername" maxChars="30"/>
+				<mx:TextInput x="160" y="82" id="txtUsername" maxChars="30" change="checkInput(event)"/>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:TextInput x="160" y="65" id="txtEmail" width="55"/>
+				<mx:TextInput x="160" y="112" id="txtEmail" width="55" change="checkInput(event)"/>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Button x="108.5" y="122" label="Submit" id="btnSubmit" click="submit_Click(event)"/>
+				<mx:Button x="108.5" y="169" label="Submit" id="btnSubmit" click="submit_Click(event)" enabled="false"/>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Button x="214" y="122" label="Cancel" id="btnCancel" click="onCancelClick(event)"/>
+				<mx:Button x="214" y="169" label="Cancel" id="btnCancel" click="onCancelClick(event)"/>
 			</mx:AddChild>
 			<mx:AddChild position="lastChild">
-				<mx:Label x="214" y="67" text="@hw.ac.uk" width="106"/>
+				<mx:Label x="214" y="114" text="@hw.ac.uk" width="106"/>
 			</mx:AddChild>
 			<mx:SetProperty name="height" value="246"/>
 			<mx:AddChild position="lastChild">
-				<mx:TextArea x="60" y="161" width="260" borderStyle="none" wordWrap="true" height="35">
+				<mx:TextArea x="60" y="22" width="260" borderStyle="none" wordWrap="true" height="35" textAlign="center" fontWeight="bold">
 					<mx:text>*Automated email will be sent to your HW account with generated password</mx:text>
 				</mx:TextArea>
 			</mx:AddChild>
