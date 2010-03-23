@@ -85,6 +85,9 @@
             	});
             
             	var menuItem1:ContextMenuItem = new ContextMenuItem('Add Marker');
+            	if(userLoggedIn == "Guest"){
+            		menuItem1.enabled = false;
+            	}else{
 	            	menuItem1.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(e:ContextMenuEvent):void {
 	               	mInfo.x = e.mouseTarget.mouseX;
 	               	mInfo.y = e.mouseTarget.mouseY;
@@ -108,10 +111,14 @@
 	               	//marker.openInfoWindow(options);
                	
                	});
-               	
+             }
+             
                	var menuItem2:ContextMenuItem = new ContextMenuItem("Add Route");
-               	menuItem2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,  addRoute);
-           
+               	if(userLoggedIn == "Guest"){
+             		menuItem2.enabled = false;
+             	}else{
+               		menuItem2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,  addRoute);
+             	}
             
             	menu.customItems.push(menuItem1);
             	menu.customItems.push(menuItem2);
