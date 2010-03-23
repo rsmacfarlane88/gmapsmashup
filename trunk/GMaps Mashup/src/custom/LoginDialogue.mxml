@@ -20,6 +20,19 @@
 			}
 		}
 		
+		private function login_Click(e:MouseEvent):void
+		{
+			if(rbLogin.selected == true){
+				loginService.send();
+			}else if(rbGuest.selected == true){
+				Application.application.userLoggedIn = "Guest";
+				this.r1.play([this]);
+				this.removeAllChildren();
+				Application.application.currentState = "loggedin";
+				Alert.show(Application.application.userLoggedIn,"Who is online", Alert.OK);
+			}
+		}
+		
 		private function onResult(e:ResultEvent):void
 		{
 			if(e.result.loginsuccess == "yes")
@@ -40,6 +53,31 @@
 			}			
 		}
 		
+		private function checkInput(e:Event):void
+		{
+			if(rbLogin.selected == true && (txtUsername.text != "" && txtPassword.text !=""))
+				{
+					btnLogin.enabled = true;
+					
+				}else{
+					btnLogin.enabled = false;
+				}
+		}
+		
+		private function checkLoginType(e:Event):void
+		{
+			if(rbGuest.selected == true)
+			{
+				txtUsername.enabled = false;
+				txtPassword.enabled = false;
+				btnLogin.enabled = true;
+			}else if(rbLogin.selected == true) {
+				txtUsername.enabled = true;
+				txtPassword.enabled = true;
+				btnLogin.enabled = false;
+			}
+		}
+		
 		private function cancel_Click(e:MouseEvent):void
 		{
 			this.visible = false;
@@ -57,13 +95,14 @@
 	<mx:Label x="40" y="160" text="Password" id="lblPassword" width="102" textAlign="right"/>
 	<mx:Label id="msgValid" text="Thank you for logging in!" visible="false" color="green"  x="126" y="189" height="20"/>
 	<mx:Label id="msgInvalid" text="Wrong Username/Password entered, try again" visible="false" color="red" x="68" y="186" height="23"/>
-	<mx:TextInput x="150" y="159" displayAsPassword="true" maxChars="30" enabled="true" id="txtPassword" tabIndex="1" borderStyle="solid" cornerRadius="10"/>
-	<mx:TextInput x="150" y="129" id="txtUsername" maxChars="30" enabled="true" tabIndex="0" cornerRadius="10" borderStyle="solid"/>
+	<mx:TextInput x="150" y="159" displayAsPassword="true" maxChars="30" enabled="true" id="txtPassword" tabIndex="1" borderStyle="solid" cornerRadius="10" change="checkInput(event)"/>
+	<mx:TextInput x="150" y="129" id="txtUsername" maxChars="30" enabled="true" tabIndex="0" cornerRadius="10" borderStyle="solid" change="checkInput(event)"/>
 	<mx:Label x="40" y="12" text="Please Login or select guest account" id="lblTitle2" fontSize="10" fontStyle="normal"/>
-	<mx:RadioButton id="rbLogin" x="120" y="38" label="Login" groupName="radiogroup1"  selected="true"/>
-	<mx:RadioButton id="rbGuest" x="120" y="68" label="Guest" groupName="radiogroup1" selected="false"/>
+	<mx:RadioButtonGroup id="radiogroup1" change="checkLoginType(event)" />
+	<mx:RadioButton id="rbLogin" x="120" y="38" label="Login" groupName="radiogroup1"  selected="true" />
+	<mx:RadioButton id="rbGuest" x="120" y="68" label="Guest" groupName="radiogroup1" selected="false" />
 	<mx:HRule x="30" y="108" width="320"/>
-	<mx:Button x="99.75" y="201" label="Login" id="btnLogin" click="loginService.send()" tabIndex="2" width="80"/>
+	<mx:Button x="99.75" y="201" label="Login" id="btnLogin" click="login_Click(event)" tabIndex="2" width="80" enabled="false"/>
 	<mx:Button x="150" y="231" label="Cancel" id="btnCancel" click="cancel_Click(event)" tabIndex="3" width="80"/>
 	<mx:HTTPService id="loginService" url="php/Login/loginValidate.php" result="onResult(event)" method="POST" showBusyCursor="true" useProxy="false">
 	<mx:request xmlns="">

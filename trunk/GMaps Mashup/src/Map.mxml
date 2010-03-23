@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" layout="absolute" 
 	xmlns:maps="com.google.maps.*" xmlns:ns1="*" xmlns:custom="custom.*" width="100%" height="100%" 
-	backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#999999, #000000]" 
+	 
 	xmlns:ns2="com.google.maps.controls.*">
 	
 	<mx:Style source="../assets/css/test.css"/>
@@ -51,18 +51,18 @@
 			private function init():void{
 				//rss.send();
 				//Security.allowDomain("http://rsmacfarlane.com");
-				service.addEventListener(ResultEvent.RESULT, onResult,false,0,true);
+				service.addEventListener(ResultEvent.RESULT, onResult);
 			}
 			
 			private function setFilterEvents():void{
-				this.filter.checkAll.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
-				this.filter.checkBuildings.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
-				this.filter.checkAccommodation.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
-				this.filter.checkShop.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
-				this.filter.checkFood.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
-				this.filter.checkEntertainment.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
-				this.filter.checkBank.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
-				this.filter.checkParking.addEventListener(Event.CHANGE,checkSelectedFilters,false,0,true);
+				this.filter.checkAll.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkBuildings.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkAccommodation.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkShop.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkFood.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkEntertainment.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkBank.addEventListener(Event.CHANGE,checkSelectedFilters);
+				this.filter.checkParking.addEventListener(Event.CHANGE,checkSelectedFilters);
 			}
 			
 			private function onReady(e:MapEvent):void
@@ -82,7 +82,7 @@
             	var latlng:LatLng;
             	menu.addEventListener(ContextMenuEvent.MENU_SELECT, function(e:ContextMenuEvent):void {
                		latlng = map.fromViewportToLatLng(new Point(e.mouseTarget.mouseX, e.mouseTarget.mouseY));
-            	},false,0,true);
+            	});
             
             	var menuItem1:ContextMenuItem = new ContextMenuItem('Add Marker');
 	            	menuItem1.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(e:ContextMenuEvent):void {
@@ -103,14 +103,14 @@
 	 				marker.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
 	                	marker.openInfoWindow(options); 
 	                	
-	 				},false,0,true);
+	 				});
 	               	map.addOverlay(marker);
 	               	//marker.openInfoWindow(options);
                	
-               	},false,0,true);
+               	});
                	
                	var menuItem2:ContextMenuItem = new ContextMenuItem("Add Route");
-               	menuItem2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,  addRoute,false,0,true);
+               	menuItem2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,  addRoute);
            
             
             	menu.customItems.push(menuItem1);
@@ -124,7 +124,7 @@
         		route = new RouteMapper();
         		mapPanel.addChild(route);
         		
-        		map.addEventListener(MapMouseEvent.CLICK, route.mapClick,false,0,true);
+        		map.addEventListener(MapMouseEvent.CLICK, route.mapClick);
         		
         		
         		
@@ -135,7 +135,7 @@
         				
         		//this.addEventListener(KeyboardEvent.KEY_DOWN, route.saveRoute);
         		
-        		map.addEventListener(MapMouseEvent.CLICK, route.routeEnd,false,0, true);		
+        		map.addEventListener(MapMouseEvent.CLICK, route.routeEnd);		
         		
         	}
 			
@@ -216,7 +216,7 @@
 			{
 				m.addEventListener(MapMouseEvent.CLICK, function(e:Event):void {
                 		m.openInfoWindow(o);
-                	} ,false,0,true);
+                	});
                 	
                 	 map.addOverlay(m);
                 	 
@@ -382,7 +382,6 @@
 
 	</mx:transitions>
 	 
-	 <custom:VideoPlayer id="testme" visible="false" />
 	
  
 <!--	<mx:HBox id="route_controller">  

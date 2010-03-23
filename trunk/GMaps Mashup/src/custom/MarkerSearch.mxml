@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="638" height="64"
 	creationComplete="init()" xmlns:search="custom.search.*" headerHeight="8">
-	
+	<mx:Style source="../assets/css/searchCss.css"/>
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -108,7 +108,7 @@
 	
     
     <search:AutoSuggest id="searchBox" change="selectMarker()" dataProvider="{markerList}" autoCompleteSuggest="false" labelField="name" height="26" 
-    	right="10" left="109" top="8" fontSize="16" focusRoundedCorners="true" textIndent="2" themeColor="#FFFFFF" cornerRadius="10"/>
+    	right="10" left="109" top="8" fontSize="16" focusRoundedCorners="true" textIndent="2" themeColor="#FFFFFF" cornerRadius="0"/>
     <mx:HTTPService id="markerSearch" result="onResult(event)" url="php/mapLoad.php" />
     <mx:Label text="Search..." height="26" fontWeight="bold" fontSize="15" textAlign="center" left="10" width="91" top="10"/>
 

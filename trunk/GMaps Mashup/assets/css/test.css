@@ -5,12 +5,17 @@
    
    color: #333333;
 } */
-Application {
+/* Application {
    backgroundColor: #ffffff;
    backgroundGradientColors: #003399, #003399;
    backgroundGradientAlphas: 1, 0.66;
    themeColor: #0066ff;
    color: #333333;
+} */
+Application {
+   backgroundColor: #003366;
+   backgroundGradientColors: #0066ff, #00ffff;
+   backgroundGradientAlphas: 0.58, 0.74;
 }
 TabNavigator {
    tabWidth: 90;
@@ -48,9 +53,15 @@ Panel {
    titleStyleName: "mypanelTitle";
 }
 
-.mypanelTitle {
+/* .mypanelTitle {
    letterSpacing: 1;
    fontSize: 12;
+} */
+.mypanelTitle {
+	letterSpacing: 1;
+   color: #ffffff;
+   fontSize: 14;
+   fontWeight: bold;
 }
 
 /* Panel {
@@ -71,10 +82,10 @@ Panel {
 TextInput {
    borderStyle: solid;
    borderColor: #666666;
-   cornerRadius: 10;
+   cornerRadius: 0;
    backgroundAlpha: 0.75;
-   backgroundColor: #666666;
-   color: #ffffff;
+   backgroundColor: #ffffff;
+   color: #000066;
    letterSpacing: 1;
    paddingLeft: 6;
    paddingRight: 0;
