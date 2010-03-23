@@ -56,7 +56,7 @@ package custom.search
 		{
 			super();
 			//make it behave as close as to a textInput as possible
-			setStyle("cornerRadius",0);
+			//setStyle("cornerRadius",0);
 			setStyle("arrowButtonWidth",0);
 			setStyle("fontWeight","normal");
 			setStyle("paddingRight",3);
