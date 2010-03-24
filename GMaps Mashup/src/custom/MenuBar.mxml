@@ -13,16 +13,26 @@
 		
 		private function initMenu():void
 		{
-			myMenu = new Menu();
+			if(Application.application.userLoggedIn == "Guest"){
+				myMenu = new Menu();
+                var dp:Object = [ 
+                  {label: "Statistics"}, 
+                  {label: "Help"}, 
+                  {label: "Log Out"}
+                ];     
+			}else{
+				myMenu = new Menu();
                 var dp:Object = [
                   {label: "Change Password"}, 
                   {label: "Statistics"}, 
                   {label: "Help"}, 
                   {label: "Log Out"}
-                ];        
-                myMenu.dataProvider = dp;
-                myMenu.addEventListener("itemClick", changeHandler,null,null,true);
-                mainMenu.popUp = myMenu;
+                ]; 
+   			}
+   			       
+            myMenu.dataProvider = dp;
+            myMenu.addEventListener("itemClick", changeHandler,null,null,true);
+            mainMenu.popUp = myMenu;
                 
 		}
 		
@@ -39,8 +49,9 @@
                 	 
                 }
                 if(label == "Log Out"){
-                	Application.application.currentState = "";
-                	Application.application.userLoggedIn = "";
+                	//Application.application.currentState = "";
+                	//Application.application.userLoggedIn = "";
+                	navigateToURL(new URLRequest(Application.application.url), "_self");
                 }
                 if(label == "Help"){
                 	var help:Help = new Help();
