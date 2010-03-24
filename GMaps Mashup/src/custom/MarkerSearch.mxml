@@ -22,7 +22,7 @@
 	    	import com.google.maps.overlays.*;
 	    	import com.google.maps.styles.*;
          
-            
+            public var test:MyCustomInfoWindow; 
             [Bindable]private var markerList:ArrayCollection;
             //private var myMap:Map = new Map();
             
@@ -77,13 +77,24 @@
 							}
 						}
 													
-						var options:InfoWindowOptions = new InfoWindowOptions({
+						test = new MyCustomInfoWindow(array[i].name,source,array[i].description, array[i].lat, array[i].lon);
+					
+							if(array[i].category == 8){
+								
+								test.fetchRouteNo(array[i].id);
+								test.link2.visible = true;
+								test.routeList.visible = true;
+							}else{
+								test.link2.visible = false;
+								test.routeList.visible = false;
+							}
 													
-													//contentHTML:html,
-													customContent: new MyCustomInfoWindow(array[i].name,source,array[i].description, array[i].lat, array[i].lon),
+                			var options:InfoWindowOptions = new InfoWindowOptions({
+													customContent: test,
+													customOffset: new Point(-10, 10),
 													cornerRadius: 20,
-                									width: 320,
-                									height: 220,
+                									width: 315,
+                									height: 225,
                 									drawDefaultFrame: false });
 					
 					
